@@ -1,0 +1,1432 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Bowl-Konfigurator — visuell an Landing angebunden
+   Scoped unter .kustomizer-root
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.kustomizer-root,
+.kustomizer-root *,
+.kustomizer-root *::before,
+.kustomizer-root *::after {
+  box-sizing: border-box;
+}
+
+.kustomizer-root {
+  /* Landing-konsistente Tokens */
+  --g-cta: #22c55e;
+  --g-cta-deep: #16a34a;
+  --g-hero: #14532d;
+  --orange: #ff5a1f;
+  --green: #22c55e;
+  --green2: #4ade80;
+  --cream: #fafff7;
+  --surface: #ffffff;
+  --bg: #f4faf5;
+  --dark: #0a1f0d;
+  --text: #1a2e1c;
+  --text-2: #4b6b50;
+  --text-3: #8aab8e;
+  --border: #d1ecd8;
+  --border-soft: #e8f5ea;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-full: 9999px;
+  --sh-sm: 0 2px 12px rgba(0, 0, 0, 0.07);
+  --sh-md: 0 4px 24px rgba(0, 0, 0, 0.09);
+
+  font-family: var(--font-landing-inter), "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  color-scheme: light dark;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  line-height: 1.55;
+}
+
+/* ── Header (schwebend — kein Blur, kein Streifen; Inhalt liegt auf Page-BG) ─ */
+.kustomizer-root header {
+  background: none;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* wie .mein-bereich-root .back-btn */
+.kustomizer-root .back-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  text-decoration: none;
+  color: var(--text-2);
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+}
+
+.kustomizer-root .back-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: var(--text);
+  transform: scale(1.05);
+}
+
+.kustomizer-root .back-btn-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: -1px;
+  flex-shrink: 0;
+}
+
+.kustomizer-root header h1 {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  flex: 1;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.kustomizer-root .header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.kustomizer-root .header-price {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+/* ── Progress: volle Breite, Capsule, Ladebalken-Füllung (ohne Schritt-Trenner) ─ */
+.kustomizer-root .progress-wrap {
+  display: block;
+  width: 100%;
+  margin: 0 0 18px;
+  padding: 0 12px;
+  position: relative;
+  z-index: 50;
+  box-sizing: border-box;
+}
+
+.kustomizer-root .progress-capsule {
+  position: relative;
+  width: 100%;
+  min-height: 32px;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  background: var(--border-soft);
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-sm);
+}
+
+.kustomizer-root .progress-capsule-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  max-width: 100%;
+  /* Gleicher Verlauf wie .btn-next („Weiter“) */
+  background: linear-gradient(135deg, var(--green) 0%, var(--g-cta-deep) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.kustomizer-root .progress-capsule-labels {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  padding: 5px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  min-height: 32px;
+  gap: 0;
+}
+
+.kustomizer-root .progress-capsule-step {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: none;
+}
+
+.kustomizer-root .progress-capsule-label {
+  display: block;
+  width: 100%;
+  padding: 0 3px;
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(8px, 2.6vw, 10px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.25;
+  /* Dunkel + starker weißer Hof: lesbar auf hellem Track und auf dunklem Grün */
+  color: #052e14;
+  -webkit-font-smoothing: antialiased;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 1),
+    0 0 4px rgba(255, 255, 255, 0.95),
+    0 0 10px rgba(255, 255, 255, 0.85),
+    0 0 18px rgba(255, 255, 255, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.9);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.kustomizer-root .progress-capsule-step.is-active .progress-capsule-label {
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(5, 46, 20, 0.55);
+}
+
+/* ── Main content ────────────────────────────────────────────────────── */
+.kustomizer-root .main {
+  padding: 16px 16px 120px;
+}
+
+/* ── Step cards + animations ─────────────────────────────────────────── */
+.kustomizer-root .step-card {
+  display: none;
+  animation: kustomizer-fadeSlide 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kustomizer-root .step-card.visible {
+  display: block;
+}
+
+@keyframes kustomizer-fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kustomizer-root .step-card {
+    animation: none;
+  }
+
+  .kustomizer-root .progress-capsule-fill {
+    transition: none;
+  }
+
+  .kustomizer-root .option-card,
+  .kustomizer-root .zutat-card {
+    transition: none;
+  }
+}
+
+/* ── Step header ─────────────────────────────────────────────────────── */
+.kustomizer-root .step-header {
+  margin-bottom: 18px;
+}
+
+.kustomizer-root .step-title {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.5px;
+  color: var(--dark);
+}
+
+.kustomizer-root .step-hint {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.kustomizer-root .counter-badge {
+  display: inline-block;
+  background: var(--orange);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--r-full);
+  margin-left: 8px;
+}
+
+/* ── Option cards (Basis, Sauce, Crunch, Protein) ────────────────────── */
+.kustomizer-root .options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.kustomizer-root .options-grid.single-col {
+  grid-template-columns: 1fr;
+}
+
+.kustomizer-root .option-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  padding: 16px 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  box-shadow: var(--sh-sm);
+}
+
+.kustomizer-root .option-card:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .option-card:hover:not(:active):not(.selected):not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--sh-md);
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+}
+
+.kustomizer-root .option-card.selected {
+  border-color: var(--green);
+  background: rgba(34, 197, 94, 0.06);
+  box-shadow: 0 0 0 1px var(--green), var(--sh-sm);
+}
+
+.kustomizer-root .option-card.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.kustomizer-root .option-card.selected .option-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kustomizer-root .option-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, var(--green), var(--g-cta-deep));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 11px;
+  color: white;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.kustomizer-root .option-emoji {
+  font-size: 28px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.kustomizer-root .option-name {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.kustomizer-root .option-desc {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+.kustomizer-root .option-price {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--orange);
+  margin-top: 6px;
+}
+
+/* ── Zutaten-Grid (3-Spalten, kompakt) ───────────────────────────────── */
+.kustomizer-root .zutaten-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.kustomizer-root .zutat-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-soft);
+  border-radius: var(--r-md);
+  padding: 10px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+  position: relative;
+  font: inherit;
+  color: inherit;
+  box-shadow: var(--sh-sm);
+}
+
+.kustomizer-root .zutat-card:active {
+  transform: scale(0.95);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .zutat-card:hover:not(:active):not(.selected):not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--sh-md);
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+}
+
+.kustomizer-root .zutat-card.selected {
+  border-color: var(--green);
+  background: rgba(34, 197, 94, 0.06);
+  box-shadow: 0 0 0 1px var(--green), var(--sh-sm);
+}
+
+.kustomizer-root .zutat-card.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.kustomizer-root .zutat-card.selected .zutat-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kustomizer-root .zutat-check {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, var(--green), var(--g-cta-deep));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 9px;
+  color: white;
+}
+
+.kustomizer-root .zutat-emoji {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.kustomizer-root .zutat-name {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.kustomizer-root .ingredient-cat-title {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 18px 0 8px;
+}
+
+.kustomizer-root .ingredient-cat-title:first-child {
+  margin-top: 0;
+}
+
+/* ── Bottom Bar (schwebend — kein Blur/Streifen wie oben) ─────────────── */
+.kustomizer-root .bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 200;
+  background: none;
+  border-top: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.kustomizer-root .btn-back {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.kustomizer-root .btn-back:hover {
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.kustomizer-root .btn-back:active {
+  transform: scale(0.93);
+}
+
+.kustomizer-root .btn-next {
+  flex: 1;
+  background: linear-gradient(135deg, var(--green) 0%, var(--g-cta-deep) 100%);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: var(--r-full);
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: -0.2px;
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.kustomizer-root .btn-next::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    transparent 60%
+  );
+  border-radius: inherit;
+}
+
+.kustomizer-root .btn-next:disabled {
+  background: var(--border);
+  color: var(--text-3);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.kustomizer-root .btn-next:disabled::before {
+  display: none;
+}
+
+.kustomizer-root .btn-next:not(:disabled):active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .btn-next:not(:disabled):hover:not(:active) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(34, 197, 94, 0.45);
+  }
+}
+
+/* ── Summary Card (kompakt, reduziert — Inhalt unverändert) ──────────── */
+.kustomizer-root .summary-card {
+  background: var(--surface);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-sm);
+  margin-bottom: 18px;
+}
+
+.kustomizer-root .summary-header {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--text);
+}
+
+.kustomizer-root .summary-header h2 {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.25px;
+  color: var(--dark);
+}
+
+.kustomizer-root .summary-header p {
+  font-size: 12px;
+  color: var(--text-3);
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+
+.kustomizer-root .summary-row {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.kustomizer-root .summary-row:has(+ .total-row) {
+  border-bottom: none;
+}
+
+.kustomizer-root .summary-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  line-height: 1.2;
+  opacity: 0.85;
+}
+
+.kustomizer-root .summary-label {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.kustomizer-root .summary-value {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.kustomizer-root .summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.kustomizer-root .summary-tag {
+  background: var(--cream);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  color: var(--text);
+}
+
+.kustomizer-root .total-row {
+  background: transparent;
+  padding: 12px 14px 14px;
+  border-radius: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+}
+
+.kustomizer-root .total-label {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+.kustomizer-root .total-price {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--green);
+  letter-spacing: -0.02em;
+}
+
+/* ── Checkout Buttons (Hierarchie: Primary → Secondary → Tertiary) ─── */
+.kustomizer-root .cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--g-cta-deep) 100%);
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--r-full);
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.35);
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: -0.2px;
+}
+
+.kustomizer-root .cart-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    transparent 55%
+  );
+  border-radius: inherit;
+}
+
+.kustomizer-root .cart-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.kustomizer-root .cart-btn:not(:disabled):active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 10px rgba(34, 197, 94, 0.2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .cart-btn:not(:disabled):hover:not(:active) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.45);
+  }
+}
+
+.kustomizer-root .wa-order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #25d366;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 15px;
+  border-radius: var(--r-full);
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+
+.kustomizer-root .wa-order-btn:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .wa-order-btn:hover:not(:active) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.4);
+  }
+}
+
+/* Zweite Zeile: WhatsApp + ggf. Auswahl ändern + Neue Bowl */
+.kustomizer-root .checkout-secondary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.kustomizer-root .checkout-secondary-row > .wa-order-btn--inline,
+.kustomizer-root .checkout-secondary-row > .checkout-revert-btn,
+.kustomizer-root .checkout-secondary-row > .restart-btn--inline {
+  flex: 1 1 0;
+  min-width: min(100%, 88px);
+  margin-top: 0;
+  width: auto;
+  box-sizing: border-box;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 11px 8px;
+  border-radius: var(--r-full);
+  white-space: normal;
+  hyphens: auto;
+}
+
+.kustomizer-root .wa-order-btn.wa-order-btn--inline {
+  box-shadow: 0 2px 10px rgba(37, 211, 102, 0.22);
+}
+
+.kustomizer-root .checkout-revert-btn {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.kustomizer-root .checkout-revert-btn:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .checkout-revert-btn:hover {
+    border-color: var(--text-3);
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.kustomizer-root .restart-btn {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  padding: 13px;
+  border-radius: var(--r-full);
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  margin-top: 10px;
+  transition: border-color 0.2s, color 0.2s, transform 0.15s;
+}
+
+.kustomizer-root .restart-btn--inline {
+  width: auto;
+  margin-top: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 11px 8px;
+}
+
+.kustomizer-root .restart-btn:hover {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+
+.kustomizer-root .restart-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Load Error / Empty ──────────────────────────────────────────────── */
+.kustomizer-root .load-error {
+  margin: 16px;
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: rgba(255, 248, 230, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #f0d78c;
+  font-size: 14px;
+  color: #5c4a00;
+}
+
+.kustomizer-root .empty-menu {
+  margin: 16px;
+  padding: 28px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border-soft);
+  color: var(--text-2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Dark mode
+   ═══════════════════════════════════════════════════════════════════════ */
+html.dark .kustomizer-root {
+  /* Gedämpfteres Grün (weniger Neon) — Progress, Weiter, Preise bleiben im gleichen System */
+  --green: #22c55e;
+  --green2: #34d399;
+  --g-cta: #22c55e;
+  --g-cta-deep: #16a34a;
+  --g-hero: #14532d;
+  --orange: #22c55e;
+  --cream: #18181b;
+  --surface: #18181b;
+  /* Neutrales „Canvas“ — Grün nur als sehr schwacher Verlauf-Akzent */
+  --bg: #09090b;
+  --dark: #fafafa;
+  --text: #e4e4e7;
+  --text-2: #a1a1aa;
+  --text-3: #71717a;
+  --border: #27272a;
+  --border-soft: #3f3f46;
+  --sh-sm: 0 2px 12px rgba(0, 0, 0, 0.25);
+  --sh-md: 0 4px 24px rgba(0, 0, 0, 0.35);
+  background:
+    radial-gradient(
+      ellipse 140% 70% at 50% -30%,
+      rgba(34, 197, 94, 0.035) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 55% at 100% 100%,
+      rgba(22, 163, 74, 0.025) 0%,
+      transparent 50%
+    ),
+    linear-gradient(168deg, #101012 0%, #0a0a0c 42%, #050506 100%);
+  background-color: #050506;
+  color: var(--text);
+  color-scheme: dark;
+}
+
+html.dark .kustomizer-root header {
+  background: none;
+  border-bottom: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html.dark .kustomizer-root .progress-capsule {
+  background: rgba(24, 24, 27, 0.92);
+  border-color: var(--border);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+html.dark .kustomizer-root .progress-capsule-label {
+  color: #fafafa;
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 1),
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 0 8px rgba(0, 0, 0, 0.9),
+    0 0 14px rgba(255, 255, 255, 0.2);
+}
+
+html.dark .kustomizer-root .progress-capsule-step.is-active .progress-capsule-label {
+  color: #fff;
+  text-decoration-color: rgba(255, 255, 255, 0.65);
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 1),
+    0 1px 3px rgba(0, 0, 0, 1),
+    0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+html.dark .kustomizer-root .option-card,
+html.dark .kustomizer-root .zutat-card {
+  background: rgba(24, 24, 27, 0.82);
+  border-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .option-card.selected,
+html.dark .kustomizer-root .zutat-card.selected {
+  background: rgba(20, 83, 45, 0.35);
+  border-color: var(--green);
+}
+
+html.dark .kustomizer-root .bottom-bar {
+  background: none;
+  border-top: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html.dark .kustomizer-root .btn-back {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-soft);
+  color: var(--text);
+}
+
+html.dark .kustomizer-root .summary-card {
+  background: rgba(24, 24, 27, 0.88);
+  border-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .summary-header {
+  border-bottom-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .summary-header h2 {
+  color: var(--text);
+}
+
+html.dark .kustomizer-root .summary-row {
+  border-bottom-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .summary-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-soft);
+  color: var(--text);
+}
+
+html.dark .kustomizer-root .total-row {
+  background: transparent;
+  border-top-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .load-error {
+  background: rgba(66, 32, 6, 0.8);
+  border-color: #92400e;
+  color: #fde68a;
+}
+
+html.dark .kustomizer-root .empty-menu {
+  background: rgba(24, 24, 27, 0.65);
+  border-color: var(--border-soft);
+  color: var(--text-3);
+}
+
+html.dark .kustomizer-root .back-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+html.dark .kustomizer-root .back-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+html.dark .kustomizer-root .checkout-revert-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Getränke (über dem Bowl-Wizard) ─────────────────────────────────── */
+.kustomizer-root .drinks-strip {
+  margin: 0 16px 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-sm);
+}
+
+.kustomizer-root .drinks-strip--solo {
+  margin: 0;
+}
+
+.kustomizer-root .drinks-strip--after-wizard {
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+.kustomizer-root .drinks-only-wrap {
+  padding: 16px 16px 24px;
+}
+
+.kustomizer-root .drinks-strip-title {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.kustomizer-root .drinks-strip-hint {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.kustomizer-root .drinks-strip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kustomizer-root .drink-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--sh-sm);
+}
+
+.kustomizer-root .drink-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.kustomizer-root .drink-card-name {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.kustomizer-root .drink-card-price {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.kustomizer-root .drink-add-btn {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--green), var(--g-cta-deep));
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.kustomizer-root .drink-add-btn:active {
+  transform: scale(0.95);
+}
+
+html.dark .kustomizer-root .drinks-strip {
+  background: rgba(24, 24, 27, 0.55);
+  border-color: var(--border-soft);
+  box-shadow: none;
+}
+
+html.dark .kustomizer-root .drink-card {
+  background: rgba(24, 24, 27, 0.75);
+  border-color: var(--border-soft);
+}
+
+/* ── Menü vs. Bowl + kompakte Getränkwahl (Zusammenfassung) ──────────── */
+.kustomizer-root .meal-choice-block {
+  margin: 20px 0 0;
+  padding-top: 4px;
+}
+
+.kustomizer-root .meal-choice-lead {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.kustomizer-root .meal-choice-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.kustomizer-root .meal-choice-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px;
+  border: 1.5px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--sh-sm);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.kustomizer-root .meal-choice-btn:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .kustomizer-root .meal-choice-btn:hover:not(:active) {
+    border-color: rgba(34, 197, 94, 0.35);
+    box-shadow: var(--sh-md);
+    transform: translateY(-2px);
+  }
+}
+
+.kustomizer-root .meal-choice-title {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dark);
+}
+
+.kustomizer-root .meal-choice-desc {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  line-height: 1.3;
+}
+
+.kustomizer-root .drinks-pick-block {
+  margin: 16px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--border-soft);
+}
+
+.kustomizer-root .drinks-pick-lead {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.kustomizer-root .drinks-pick-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kustomizer-root .drinks-pick-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--sh-sm);
+}
+
+.kustomizer-root .drinks-pick-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.kustomizer-root .drinks-pick-name {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.kustomizer-root .drinks-pick-price {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.kustomizer-root .drinks-pick-add {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--green), var(--g-cta-deep));
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.kustomizer-root .drinks-pick-add:active {
+  transform: scale(0.92);
+}
+
+.kustomizer-root .drinks-pick-hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+html.dark .kustomizer-root .meal-choice-btn {
+  background: rgba(24, 24, 27, 0.75);
+  border-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .meal-choice-lead,
+html.dark .kustomizer-root .meal-choice-title {
+  color: var(--text);
+}
+
+html.dark .kustomizer-root .drinks-pick-row {
+  background: rgba(24, 24, 27, 0.75);
+  border-color: var(--border-soft);
+}
+
+/* ── Menü-Kombi Deep-Link Banner ─────────────────────────────────────── */
+.kustomizer-root .menu-offer-banner {
+  position: relative;
+  margin: 0 16px 12px;
+  padding: 14px 40px 14px 16px;
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--sh-md);
+}
+
+.kustomizer-root .menu-offer-banner-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.kustomizer-root .menu-offer-banner-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.kustomizer-root .menu-offer-banner-title {
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--g-cta-deep);
+  margin-bottom: 6px;
+}
+
+.kustomizer-root .menu-offer-banner-text {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.kustomizer-root .menu-offer-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.kustomizer-root .menu-offer-banner-primary {
+  flex: 1;
+  min-width: 160px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--green), var(--g-cta-deep));
+  color: white;
+  font-family: var(--font-landing-jakarta), "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(34, 197, 94, 0.25);
+}
+
+.kustomizer-root .menu-offer-banner-secondary {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--g-cta-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 8px 4px;
+}
+
+.kustomizer-root .menu-offer-banner-done {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--green);
+}
+
+html.dark .kustomizer-root .menu-offer-banner {
+  background: rgba(24, 24, 27, 0.68);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-color: var(--border-soft);
+}
+
+html.dark .kustomizer-root .menu-offer-banner-text {
+  color: var(--text);
+}
+
+html.dark .kustomizer-root .menu-offer-banner-close {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8f5eb;
+}

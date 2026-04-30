@@ -1,0 +1,287 @@
+/* Karriere-Seite — konsistent mit site-page / site-box aus landing.css */
+
+.odis-customer-site .karriere-intro {
+  margin-bottom: 28px;
+}
+
+.odis-customer-site .karriere-cards {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 560px) {
+  .odis-customer-site .karriere-cards {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+.odis-customer-site .karriere-card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow: var(--sh-sm);
+  transition: box-shadow 0.18s;
+}
+
+.odis-customer-site .karriere-card:hover {
+  box-shadow: var(--sh-md);
+}
+
+.odis-customer-site .karriere-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.odis-customer-site .karriere-card-header h2 {
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--dark);
+  margin: 0;
+}
+
+.odis-customer-site .karriere-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--g-cta-deep);
+  background: var(--g-soft);
+  border-radius: var(--r-full);
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+.odis-customer-site .karriere-teaser {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.odis-customer-site .karriere-cta-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--g-cta-deep);
+}
+
+.odis-customer-site .karriere-deadline {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 8px;
+}
+
+/* Initiativ-Box */
+.odis-customer-site .karriere-initiativ {
+  background: var(--g-tint);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.odis-customer-site .karriere-initiativ h2 {
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.odis-customer-site .karriere-initiativ p {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* Formular */
+.odis-customer-site .karriere-form-section {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  padding: 24px 20px;
+  box-shadow: var(--sh-sm);
+}
+
+.odis-customer-site .karriere-form-section h2 {
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.odis-customer-site .karriere-form-lead {
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: 18px;
+}
+
+.odis-customer-site .karriere-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.odis-customer-site .karriere-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.odis-customer-site .karriere-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.odis-customer-site .karriere-field input,
+.odis-customer-site .karriere-field select,
+.odis-customer-site .karriere-field textarea {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.odis-customer-site .karriere-field input:focus,
+.odis-customer-site .karriere-field select:focus,
+.odis-customer-site .karriere-field textarea:focus {
+  border-color: var(--g-cta);
+  box-shadow: 0 0 0 3px var(--g-soft);
+}
+
+.odis-customer-site .karriere-btn {
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--g-cta), var(--g-cta-deep));
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+  transition: box-shadow 0.18s, transform 0.12s;
+  align-self: flex-start;
+}
+
+.odis-customer-site .karriere-btn:hover {
+  box-shadow: 0 6px 24px rgba(34, 197, 94, 0.45);
+  transform: translateY(-1px);
+}
+
+.odis-customer-site .karriere-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.odis-customer-site .karriere-btn-secondary {
+  background: var(--surface);
+  color: var(--g-cta-deep);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.odis-customer-site .karriere-btn-secondary:hover {
+  background: var(--g-tint);
+  box-shadow: none;
+}
+
+.odis-customer-site .karriere-error {
+  font-size: 13px;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.odis-customer-site .karriere-success {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.odis-customer-site .karriere-success h2 {
+  color: var(--g-cta-deep);
+  margin-bottom: 8px;
+}
+
+.odis-customer-site .karriere-success p {
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: 16px;
+}
+
+/* ── Dark Mode ───────────────────────────────────────────────
+   Basis-Tokens (--bg, --surface, --text …) werden global in
+   landing.css auf .site-page neutral überschrieben.
+   Hier nur karriere-spezifische Anpassungen.
+   ──────────────────────────────────────────────────────────── */
+
+html.dark .odis-customer-site .karriere-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .odis-customer-site .karriere-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .odis-customer-site .karriere-badge {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+}
+
+html.dark .odis-customer-site .karriere-cta-text {
+  color: #4ade80;
+}
+
+html.dark .odis-customer-site .karriere-initiativ {
+  background: var(--surface);
+  border-color: var(--border-soft);
+}
+
+html.dark .odis-customer-site .karriere-form-section {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .odis-customer-site .karriere-field input,
+html.dark .odis-customer-site .karriere-field select,
+html.dark .odis-customer-site .karriere-field textarea {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+html.dark .odis-customer-site .karriere-field input:focus,
+html.dark .odis-customer-site .karriere-field select:focus,
+html.dark .odis-customer-site .karriere-field textarea:focus {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+html.dark .odis-customer-site .karriere-btn {
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.18);
+}
+
+html.dark .odis-customer-site .karriere-btn:hover {
+  box-shadow: 0 6px 24px rgba(34, 197, 94, 0.28);
+}
+
+html.dark .odis-customer-site .karriere-btn-secondary {
+  color: #4ade80;
+}
+
+html.dark .odis-customer-site .karriere-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .odis-customer-site .karriere-success h2 {
+  color: #4ade80;
+}

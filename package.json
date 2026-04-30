@@ -1,0 +1,34 @@
+{
+  "name": "gastro-system",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "start": "next start",
+    "db:audit": "node ./scripts/db-audit.mjs",
+    "db:cleanup": "node ./scripts/db-audit.mjs --cleanup"
+  },
+  "dependencies": {
+    "@netlify/mcp": "^1.15.1",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.0",
+    "@types/qrcode": "^1.5.6",
+    "jspdf": "^4.2.1",
+    "lightningcss": "^1.32.0",
+    "next": "16.2.3",
+    "qrcode": "^1.5.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.9",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "netlify-cli": "^24.11.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
