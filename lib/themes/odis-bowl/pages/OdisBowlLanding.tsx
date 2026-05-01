@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LandingHeroBackdrop } from "../components/LandingHeroBackdrop";
 import { LandingHeroLogo } from "../components/LandingHeroLogo";
 import { LandingScrollEffects } from "../components/LandingScrollEffects";
+import type { MenuCategory } from "@/lib/types";
 
 const LANDING_HOW_STEPS = [
   { emoji: "🥣", label: "Bowl wählen", sub: "Menü oder Konfigurator" },
@@ -29,6 +30,8 @@ export type OdisBowlLandingProps = {
     datenschutz?: string;
     instagram?: string;
   };
+  /** Menüdaten für Landing-Vorschau */
+  menu?: MenuCategory[];
 };
 
 const DEFAULTS: Required<Omit<OdisBowlLandingProps, "basePath">> = {
@@ -61,6 +64,7 @@ export function OdisBowlLanding({
 }: OdisBowlLandingProps) {
   const orderHref = `${basePath}/order`;
   const accountHref = `${basePath}/konto`;
+  const previewItems = (menu ?? []).flatMap((category) => category.items).slice(0, 6);
   const waUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
     whatsappGreeting,
   )}`;
@@ -155,11 +159,30 @@ export function OdisBowlLanding({
             ›
           </div>
         </Link>
-        {/*
-          NOTE: Hier renderte das Original <LandingMenuSection> mit Bowl-Presets,
-          Menu-Offers, Drinks aus der Bowl-Schema-DB. Im gastro-system mit
-          generischem menu_items-Schema folgt dieser Bereich in einer Folge-Iteration.
-        */}
+        {previewItems.map((item, index) => {
+          const variant = index % 3 === 0 ? "featured" : index % 3 === 1 ? "vegan" : "chicken";
+          const emoji = index % 3 === 0 ? "🥣" : index % 3 === 1 ? "🥗" : "🍗";
+          const badge = index === 0 ? "🔥 Hit" : index % 4 === 2 ? "Neu" : null;
+
+          return (
+            <Link key={item.id} className="product-card reveal" href={orderHref}>
+              <div className={`prod-visual prod-visu-${variant}`}>
+                <span className="prod-emoji" aria-hidden>
+                  {emoji}
+                </span>
+                {badge && <span className="prod-badge badge-new">{badge}</span>}
+              </div>
+              <div className="prod-body">
+                <h4 className="prod-name">{item.name}</h4>
+                {item.description && <p className="prod-desc">{item.description}</p>}
+                <div className="prod-footer">
+                  <span className="prod-price">{`${Number(item.price).toFixed(2)} €`}</span>
+                  <span className="prod-btn">Bestellen</span>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
       <div className="loyalty-section">

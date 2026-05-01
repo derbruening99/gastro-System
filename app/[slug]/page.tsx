@@ -74,6 +74,7 @@ export default async function TenantLandingPage({
 
   if (!tenant) notFound()
 
+  const menu = await getMenuByRestaurant(tenant.id)
   // ─── Odi's-Bowl-Theme-Switch ───────────────────────────────────────────────
   // Slug "odis-bowl" rendert die neue 1:1-portierte Design-Variante.
   // Andere Tenants nutzen weiter die generische Landing-Page unten.
@@ -86,11 +87,11 @@ export default async function TenantLandingPage({
         whatsappGreeting={`Hallo ${tenant.name}, ich möchte bestellen:\n\n`}
         location={tenant.address || undefined}
         brandFooter={tenant.name}
+        menu={menu}
       />
     )
   }
 
-  const menu = await getMenuByRestaurant(tenant.id)
   const accent = tenant.primary_color
   const orderHref = `/${slug}/order`
   const kustomizerHref = `/${slug}/kustomizer`

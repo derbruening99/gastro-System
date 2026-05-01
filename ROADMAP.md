@@ -312,6 +312,38 @@ STRIPE_PLATFORM_SECRET_KEY=sk_live_... # Sebastians Platform-Account
 
 ---
 
+## Phase 9.10 — Website Perfektion (Finale Odi's Bowl) 🎯
+
+> **Status:** Aktiv — gestartet 2026-05-01  
+> **Ziel:** Höhere Conversion auf der Landing + professioneller, konsistenter Multi-Tenant-Auftritt vor Kundentermin.
+
+### Audit: Kritische Findings (Landing & Funktionen)
+
+| Priorität | Finding | Impact |
+|-----------|---------|--------|
+| **P0** | Odi's-Bowl-Theme zeigte im Bereich "Unser Menü" keine echten Produktkarten | Schwächt Vertrauen und Kaufimpuls im wichtigsten Conversion-Bereich |
+| **P1** | Footer- und Social-Links sind zwischen generischer Landing und Odi-Theme inkonsistent | Uneinheitlicher Markenauftritt, potenziell tote Klickpfade |
+| **P1** | CTA-Führung konkurriert stellenweise (`order`, `kustomizer`, WhatsApp) ohne klare Primärlogik je Tenant | Reibung im Bestellfluss |
+| **P2** | Conversion-Bausteine (Social Proof, VIP, Menü-Teaser) sind nicht als klarer Funnel priorisiert | Potenzial bleibt liegen |
+
+### Sprint A — Sofortmaßnahmen (High Impact)
+
+| Maßnahme | Status | Details |
+|----------|--------|---------|
+| **A1. Echte Menü-Preview auf Odi's Landing** | **In Arbeit** 🔄 | Statt Platzhalter: Live-Menü-Items inkl. Preis als klickbare Karten auf `/order`. |
+| **A2. CTA-Hierarchie schärfen** | **Offen** ⏳ | Primärer CTA pro Tenant definieren, sekundäre Pfade visuell abstufen. |
+| **A3. Footer-Link-Qualität absichern** | **Offen** ⏳ | Keine Platzhalter-Links; nur validierte externe/internal Links rendern. |
+
+### Sprint B — Qualitäts-Polish (nach A)
+
+| Maßnahme | Status | Details |
+|----------|--------|---------|
+| **B1. Website QA Pass (Mobile-first)** | **Offen** ⏳ | Hero, Nav, FAB, CTA, Footer auf iPhone/Android Breakpoints prüfen. |
+| **B2. Content-Konsistenz je Tenant** | **Offen** ⏳ | Claims, Kontaktinfos, Öffnungszeiten und Linktexte tenant-genau halten. |
+| **B3. Conversion-Messpunkte definieren** | **Offen** ⏳ | Events für Hero-CTA, Menü-Klick, WhatsApp-CTA, Final-Order-CTA. |
+
+---
+
 ## Kurz-Checkliste für Agenten / PRs
 
 - [ ] Änderung passt zu aktuellem Fokus (**Phase 9 / Gastro System**).
