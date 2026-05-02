@@ -3,6 +3,8 @@
 import { useState, useTransition, use } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 import Link from 'next/link'
+import { useTenant } from '@/contexts/tenant-context'
+import { SiteNav } from '../landing/site-nav'
 
 // SSR-fähiger Browser-Client — speichert Session in Cookies, nicht localStorage
 const supabase = createBrowserClient(
@@ -31,6 +33,7 @@ function isValidPhone(p: string): boolean {
 
 export default function AuthPage({ params }: Props) {
   const { slug } = use(params)
+  const tenant = useTenant()
 
   const [tab, setTab] = useState<Tab>('login')
   const [phone, setPhone] = useState('')
@@ -109,8 +112,9 @@ export default function AuthPage({ params }: Props) {
   }
 
   return (
-    <div className="odis-landing" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <div style={{ maxWidth: 420, margin: '0 auto', padding: '32px 20px', width: '100%' }}>
+    <div className="odis-landing odis-customer-site has-glass-nav" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <SiteNav slug={slug} restaurantName={tenant.name} isLoggedIn={false} />
+      <div style={{ maxWidth: 420, margin: '0 auto', padding: '132px 20px 32px', width: '100%' }}>
 
         {/* Zurück */}
         <Link href={`/${slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'var(--text-2)', fontSize: 14, fontWeight: 600, marginBottom: 28 }}>

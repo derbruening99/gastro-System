@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Bilder von Supabase Storage erlauben
   images: {
+    qualities: [75, 88],
     remotePatterns: [
       {
         protocol: "https",

@@ -30,28 +30,47 @@ export async function VipSection({ slug, restaurantId }: Props) {
     return (
       <div className="vip-section">
         <div className="vip-cta-card reveal">
-          <div className="vip-cta-top">
-            <span className="vip-cta-badge">VIP Stempelkarte</span>
-            <h2 className="vip-cta-title">
-              Sammle Stempel,<br />
-              <span className="vip-cta-em">kassiere Gratis-Essen</span>
-            </h2>
-            <p className="vip-cta-sub">
-              Registriere dich kostenlos und sammle bei jeder Bestellung einen Stempel.
-              {STAMPS_FOR_REWARD} Stempel = 1 Gericht umsonst.
-            </p>
-          </div>
+          <div className="vip-cta-layout">
+            <div className="vip-cta-copy">
+              <div className="vip-cta-top">
+                <span className="vip-cta-badge">VIP Stempelkarte</span>
+                <h2 className="vip-cta-title">
+                  Sammle Stempel,<br />
+                  <span className="vip-cta-em">kassiere Gratis-Essen</span>
+                </h2>
+                <p className="vip-cta-sub">
+                  Registriere dich kostenlos und sammle bei jeder Bestellung einen Stempel.{' '}
+                  {STAMPS_FOR_REWARD} Stempel = 1 Gericht umsonst.
+                </p>
+              </div>
 
-          <ul className="vip-benefits">
-            {BENEFITS.map((benefit) => (
-              <li key={benefit} className="vip-benefit-item">
-                <span className="vip-benefit-check">
-                  <CheckIcon />
-                </span>
-                {benefit}
-              </li>
-            ))}
-          </ul>
+              <ul className="vip-benefits">
+                {BENEFITS.map((benefit) => (
+                  <li key={benefit} className="vip-benefit-item">
+                    <span className="vip-benefit-check">
+                      <CheckIcon />
+                    </span>
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="vip-preview-card" aria-hidden>
+              <div className="vip-preview-top">
+                <span>ODI'S VIP</span>
+                <strong>{STAMPS_FOR_REWARD}/8</strong>
+              </div>
+              <div className="vip-preview-stamps">
+                {Array.from({ length: STAMPS_FOR_REWARD }).map((_, index) => (
+                  <span key={index} className={index < 5 ? 'is-filled' : ''}>
+                    {index < 5 ? <CheckIcon /> : null}
+                  </span>
+                ))}
+              </div>
+              <p>Jeder Besuch bringt dich näher zur Gratis-Bowl.</p>
+            </div>
+          </div>
 
           <div className="vip-cta-actions">
             <Link href={`/${slug}/auth`} className="vip-cta-btn">

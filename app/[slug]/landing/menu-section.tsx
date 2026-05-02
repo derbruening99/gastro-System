@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { MenuCategory } from '@/lib/types'
+import type { MenuCategory, MenuItem } from '@/lib/types'
 
 // Produktfoto-Pool aus /public/products/ (Odi's Bowl Rheine)
 const PHOTO_POOL = [
@@ -29,8 +29,46 @@ function getVariant(index: number): Variant {
   return variants[index % 3]
 }
 
-function getPhoto(index: number): string {
-  return PHOTO_POOL[index % PHOTO_POOL.length]
+// Deterministischer 32-bit Hash (FNV-1a-Light) — selber Input → selbes Foto.
+function hashString(s: string): number {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+/**
+ * Foto-Auflösung mit klarer Priorität:
+ *   1. item.image_url  →  in DB gepflegtes Foto (höchste Prio)
+ *   2. Hash(item.id)   →  deterministisches Pool-Foto ohne Wiederholung im sichtbaren Landing-Set
+ */
+function resolvePhoto(item: MenuItem, fallbackPhoto: string): string {
+  if (item.image_url && item.image_url.trim().length > 0) {
+    return item.image_url
+  }
+  return fallbackPhoto
+}
+
+function assignFallbackPhotos(items: MenuItem[]): Map<string, string> {
+  const used = new Set<string>()
+  const photos = new Map<string, string>()
+
+  items.forEach((item) => {
+    let idx = hashString(item.id) % PHOTO_POOL.length
+    let photo = PHOTO_POOL[idx]
+
+    while (used.has(photo) && used.size < PHOTO_POOL.length) {
+      idx = (idx + 1) % PHOTO_POOL.length
+      photo = PHOTO_POOL[idx]
+    }
+
+    used.add(photo)
+    photos.set(item.id, photo)
+  })
+
+  return photos
 }
 
 function getBadge(index: number, variant: Variant): BadgeType {
@@ -53,6 +91,7 @@ type Props = {
 export function MenuSection({ menu, slug }: Props) {
   // Alle Items flach, max 6 für Landing Page
   const allItems = menu.flatMap((cat) => cat.items).slice(0, 6)
+  const fallbackPhotos = assignFallbackPhotos(allItems)
 
   if (allItems.length === 0) return null
 
@@ -63,6 +102,7 @@ export function MenuSection({ menu, slug }: Props) {
         const badge = getBadge(index, variant)
         const isWide = index === 0
         const delayClass = DELAY_CLASSES[index] ?? ''
+        const fallbackPhoto = fallbackPhotos.get(item.id) ?? PHOTO_POOL[index % PHOTO_POOL.length]
 
         const cardClasses = [
           'product-card',
@@ -86,7 +126,7 @@ export function MenuSection({ menu, slug }: Props) {
                   gerendert wurden. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={getPhoto(index)}
+                src={resolvePhoto(item, fallbackPhoto)}
                 alt={item.name}
                 loading="lazy"
                 decoding="async"

@@ -155,12 +155,16 @@ export default async function UnserLadenPage({ params }: { params: Promise<{ slu
         </section>
 
         <style>{`
+          /* ── Dark Premium — kohärent zur Landing ───────────────── */
           .laden-page {
             min-height: 100vh;
-            background: var(--bg, #f4faf5);
-            color: var(--text, #1a2e1c);
+            background:
+              radial-gradient(58% 72% at 78% 8%, rgba(255, 167, 38, 0.10), transparent 68%),
+              radial-gradient(48% 64% at 8% 88%, rgba(76, 175, 80, 0.09), transparent 70%),
+              linear-gradient(180deg, #0a0d0a 0%, #0e1410 48%, #0a0d0a 100%);
+            color: #fff;
             font-family: var(--font-landing-inter, 'Inter', system-ui, sans-serif);
-            padding-bottom: 64px;
+            padding-bottom: 72px;
           }
           .laden-hero {
             position: relative; min-height: 460px;
@@ -181,7 +185,8 @@ export default async function UnserLadenPage({ params }: { params: Promise<{ slu
           }
           .laden-eyebrow {
             font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
-            text-transform: uppercase; color: #86efac; margin-bottom: 10px;
+            text-transform: uppercase; color: rgba(255, 167, 38, 0.95);
+            margin-bottom: 10px;
           }
           .laden-title {
             font-family: var(--font-landing-jakarta, 'Plus Jakarta Sans', sans-serif);
@@ -233,13 +238,14 @@ export default async function UnserLadenPage({ params }: { params: Promise<{ slu
             font-size: clamp(28px, 6vw, 40px);
             font-weight: 900;
             margin: 0 0 16px;
-            color: var(--dark, #0a1f0d);
+            color: #fff;
             line-height: 1.05;
+            letter-spacing: -0.02em;
           }
           .laden-about-section p {
             font-size: 16px;
             line-height: 1.75;
-            color: var(--text-2, #4b6b50);
+            color: rgba(255,255,255,0.72);
             margin-bottom: 24px;
           }
 
@@ -248,35 +254,53 @@ export default async function UnserLadenPage({ params }: { params: Promise<{ slu
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             max-width: 1100px; margin: 0 auto 40px; padding: 0 20px;
           }
+          /* Glas-Karten — gleiche Sprache wie Landing */
           .laden-info-card {
-            background: var(--surface, #fff);
-            border: 1.5px solid var(--border-soft, #e8f5ea);
-            border-radius: 18px;
-            padding: 22px 20px;
-            box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+            background: linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.03));
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 22px;
+            padding: 24px 22px;
+            box-shadow:
+              inset 0 1px 0 rgba(255,255,255,0.06),
+              0 12px 34px rgba(0,0,0,0.30);
+            backdrop-filter: blur(14px) saturate(1.25);
+            -webkit-backdrop-filter: blur(14px) saturate(1.25);
+            transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s;
           }
-          .laden-info-icon { font-size: 26px; margin-bottom: 8px; }
+          .laden-info-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255,255,255,0.16);
+          }
+          .laden-info-icon {
+            font-size: 26px; margin-bottom: 10px;
+            filter: drop-shadow(0 4px 14px rgba(255, 167, 38, 0.3));
+          }
           .laden-info-card h3 {
             font-family: var(--font-landing-jakarta, 'Plus Jakarta Sans', sans-serif);
             font-size: 17px; font-weight: 800; margin-bottom: 8px;
-            color: var(--dark, #0a1f0d);
+            color: #fff;
           }
-          .laden-info-card p { font-size: 14px; color: var(--text-2, #4b6b50); margin-bottom: 4px; line-height: 1.5; }
+          .laden-info-card p {
+            font-size: 14px; color: rgba(255,255,255,0.72);
+            margin-bottom: 4px; line-height: 1.5;
+          }
           .laden-info-tel {
-            color: var(--dark, #0a1f0d); font-weight: 700; text-decoration: none;
+            color: #fff; font-weight: 700; text-decoration: none;
           }
-          .laden-info-tel:hover { text-decoration: underline; }
+          .laden-info-tel:hover { color: rgba(255, 167, 38, 0.95); }
           .laden-info-link {
             display: inline-block; margin-top: 8px;
-            color: #16a34a; font-size: 13px; font-weight: 700; text-decoration: none;
+            color: rgba(255, 167, 38, 0.95);
+            font-size: 13px; font-weight: 700; text-decoration: none;
           }
           .laden-info-link:hover { text-decoration: underline; }
 
           .laden-gallery-section { max-width: 1100px; margin: 0 auto 40px; padding: 0 20px; }
           .laden-section-title {
             font-family: var(--font-landing-jakarta, 'Plus Jakarta Sans', sans-serif);
-            font-size: 24px; font-weight: 800; color: var(--dark, #0a1f0d); margin-bottom: 16px;
+            font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 18px;
             text-align: center;
+            letter-spacing: -0.01em;
           }
           .laden-gallery {
             display: grid; gap: 12px;
@@ -285,26 +309,43 @@ export default async function UnserLadenPage({ params }: { params: Promise<{ slu
           .laden-gallery-item {
             position: relative; aspect-ratio: 4/3;
             border-radius: 16px; overflow: hidden;
-            border: 1.5px solid var(--border-soft, #e8f5ea);
-            box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.09);
+            box-shadow:
+              inset 0 1px 0 rgba(255,255,255,0.05),
+              0 12px 28px rgba(0,0,0,0.35);
           }
 
           .laden-bottom-cta {
             text-align: center;
-            background: var(--surface, #fff);
-            border: 1.5px solid var(--border-soft, #e8f5ea);
-            border-radius: 22px;
-            padding: 36px 24px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.032));
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 28px;
+            padding: 40px 28px;
             max-width: 700px; margin: 0 auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            box-shadow:
+              inset 0 1px 0 rgba(255,255,255,0.08),
+              0 20px 56px rgba(0,0,0,0.38);
+            backdrop-filter: blur(16px) saturate(1.25);
+            -webkit-backdrop-filter: blur(16px) saturate(1.25);
+            position: relative;
+            overflow: hidden;
+          }
+          .laden-bottom-cta::before {
+            content: "";
+            position: absolute;
+            top: -2px; left: 28px; right: 28px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 167, 38, 0.95), transparent);
+            opacity: 0.85;
           }
           .laden-bottom-cta h2 {
             font-family: var(--font-landing-jakarta, 'Plus Jakarta Sans', sans-serif);
-            font-size: 26px; font-weight: 900; color: var(--dark, #0a1f0d);
-            margin-bottom: 8px;
+            font-size: 26px; font-weight: 900; color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
           }
           .laden-bottom-cta p {
-            font-size: 15px; color: var(--text-2, #4b6b50); margin-bottom: 20px;
+            font-size: 15px; color: rgba(255,255,255,0.72); margin-bottom: 22px;
           }
 
           @media (max-width: 480px) {

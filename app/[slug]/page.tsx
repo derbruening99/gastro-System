@@ -105,20 +105,12 @@ export default async function TenantLandingPage({
           <HeroLogo restaurantName={tenant.name} logoUrl={logoUrl} />
           <h1 className="hero-headline">
             <span className="word w1">Frisch.</span>
-            <span className="word w2">Lecker.</span>
-            <span className="word w3"><em>Deine Bowl.</em></span>
+            <span className="word w2"><em>Gesund.</em></span>
+            <span className="word w3">Lecker.</span>
           </h1>
           <p className="hero-sub">
             Selbst gemacht schmeckt besser. Bestell dein Essen in 60 Sekunden.
           </p>
-          <div className="hero-meta">
-            {tenant.address && <span className="hero-meta-item">📍 {tenant.address}</span>}
-            {tenant.phone && phoneHref && (
-              <a className="hero-meta-item hero-meta-link" href={phoneHref}>
-                📞 {tenant.phone}
-              </a>
-            )}
-          </div>
           <div className="hero-btns">
             <Link
               className="btn-cta"
@@ -139,9 +131,29 @@ export default async function TenantLandingPage({
               Jetzt via WhatsApp bestellen
             </a>
           )}
-          <p className="hero-note">
-            Abholung · {tenant.address ?? 'direkt ab Restaurant'}
-          </p>
+          {/* Adresse + Telefon — einmalig, unter dem WhatsApp-CTA */}
+          {(tenant.address || tenant.phone) && (
+            <div className="hero-meta">
+              {tenant.address && (
+                <span className="hero-meta-item">
+                  <span className="hero-meta-icon" aria-hidden>📍</span>
+                  <span>
+                    <strong>Standort</strong>
+                    {tenant.address}
+                  </span>
+                </span>
+              )}
+              {tenant.phone && phoneHref && (
+                <a className="hero-meta-item hero-meta-link" href={phoneHref}>
+                  <span className="hero-meta-icon" aria-hidden>📞</span>
+                  <span>
+                    <strong>Telefon</strong>
+                    {tenant.phone}
+                  </span>
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -152,43 +164,16 @@ export default async function TenantLandingPage({
         </div>
       )}
 
-      {/* ── So bestellst du ─────────────────────────────────────── */}
-      <section className="how-quick" aria-labelledby="how-title">
-        <div className="how-quick-glow g1" aria-hidden />
-        <div className="how-quick-glow g2" aria-hidden />
+      {/* ── 1. Treuecard / VIP — direkt nach Hero, falls eingeloggt ─ */}
+      <VipSection slug={slug} restaurantId={tenant.id} />
 
-        <div className="how-quick-inner">
-          <div className="how-quick-intro">
-            <p className="how-quick-eyebrow">In 4 Schritten</p>
-            <h2 id="how-title" className="how-quick-title">
-              So bestellst du<br />
-              <em className="how-quick-em">dein Essen</em>
-            </h2>
-          </div>
-
-          <ol className="how-quick-steps">
-            {HOW_STEPS.map(({ emoji, label, sub }, index) => (
-              <li key={label} className="how-quick-card">
-                <span className="how-quick-deco-num" aria-hidden>{index + 1}</span>
-                <span className="how-quick-emoji" aria-hidden>{emoji}</span>
-                <span className="how-quick-label">{label}</span>
-                <span className="how-quick-sub">{sub}</span>
-                {index < HOW_STEPS.length - 1 && (
-                  <span className="how-quick-arrow" aria-hidden>›</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ── Menü ──────────────────────────────────────────────────── */}
+      {/* ── 2. Menü — Hauptangebot ohne lange Vorrede ────────────── */}
       {menu.length > 0 && (
-        <>
+        <section className="menu-showcase">
           <div className="sec-head reveal">
-            <div className="ey">Unser Menü</div>
-            <h2>Wähle dein Gericht</h2>
-            <p>Frisch zubereitet — täglich für dich</p>
+            <div className="ey">Unsere Bowls</div>
+            <h2>Wähle <em>dein</em> Gericht</h2>
+            <p>Täglich frisch zubereitet — handgemacht in Rheine</p>
           </div>
 
           <div className="products" id="bestellen">
@@ -208,11 +193,33 @@ export default async function TenantLandingPage({
 
             <MenuSection menu={menu} slug={slug} accentColor={accent} />
           </div>
-        </>
+        </section>
       )}
 
-      {/* ── VIP / Stempelkarte ────────────────────────────────────── */}
-      <VipSection slug={slug} restaurantId={tenant.id} />
+      {/* ── 3. Bestellflow — kompakte Glas-Steps mit Bowl-DNA ───── */}
+      <section className="flow-steps" aria-labelledby="flow-title">
+        <div className="flow-steps-bg" aria-hidden />
+        <div className="flow-steps-inner">
+          <div className="sec-head reveal" style={{ marginBottom: 18 }}>
+            <div className="ey">In 60 Sekunden zur Bowl</div>
+            <h2 id="flow-title">So <em>einfach</em> geht's</h2>
+            <p>Kein Login, keine App, keine Umwege.</p>
+          </div>
+
+          <ol className="flow-steps-list">
+            {HOW_STEPS.map(({ emoji, label, sub }, index) => (
+              <li key={label} className="flow-step reveal" style={{ animationDelay: `${0.05 * index}s` }}>
+                <div className="flow-step-num" aria-hidden>0{index + 1}</div>
+                <div className="flow-step-icon" aria-hidden>{emoji}</div>
+                <div className="flow-step-body">
+                  <h3 className="flow-step-label">{label}</h3>
+                  <p className="flow-step-sub">{sub}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
       {/* ── Social Proof ──────────────────────────────────────────── */}
       <div className="social-proof-section reveal">
@@ -257,41 +264,6 @@ export default async function TenantLandingPage({
           </span>
         </div>
       </div>
-
-      {/* ── Info Card ─────────────────────────────────────────────── */}
-      {(tenant.address || tenant.phone) && (
-        <div className="info-section">
-          <div className="info-card reveal">
-            {tenant.address && (
-              <div className="info-row">
-                <div className="info-ico" aria-hidden>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                <div>
-                  <h4>Standort</h4>
-                  <p>{tenant.address}</p>
-                </div>
-              </div>
-            )}
-            {tenant.phone && (
-              <div className="info-row">
-                <div className="info-ico" aria-hidden>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4>Kontakt</h4>
-                  <p>{tenant.phone}</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* ── Order CTA ─────────────────────────────────────────────── */}
       <div className="order-section reveal">

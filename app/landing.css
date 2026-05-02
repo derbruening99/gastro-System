@@ -53,7 +53,14 @@
       --sh-cta-hover: 0 10px 40px rgba(232, 78, 25, 0.55);
     }
 
-html:has(.odis-landing) { scroll-behavior: smooth; }
+html:has(.odis-landing) {
+      scroll-behavior: smooth;
+      background: #0a0d0a;
+    }
+
+body:has(.odis-landing) {
+      background: #0a0d0a;
+    }
 
 .odis-landing {
       font-family: var(--font-landing-inter), 'Inter', system-ui, sans-serif;
@@ -236,6 +243,161 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
 
+.odis-customer-site .site-top-nav--global .site-nav-glass,
+.odis-customer-site .site-top-nav--global .nav-cta {
+      background: rgba(14, 20, 16, 0.48);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow:
+        0 12px 34px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(18px) saturate(1.25);
+      -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    }
+
+.odis-customer-site .site-top-nav--global .site-nav-link,
+.odis-customer-site .site-top-nav--global .nav-cta {
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.32);
+    }
+
+.odis-customer-site .site-top-nav--global .site-nav-link:hover,
+.odis-customer-site .site-top-nav--global .site-nav-link.is-active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+.odis-customer-site .site-top-nav--global .site-nav-link.site-nav-link--primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--g-cta), var(--g-cta-deep));
+    }
+
+@media (max-width: 840px) {
+      .odis-customer-site .site-top-nav {
+        grid-template-columns: minmax(0, auto) minmax(0, auto);
+        gap: 8px 10px;
+      }
+
+      .odis-customer-site .site-nav-glass {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        max-width: calc(100vw - 36px);
+        justify-self: center;
+      }
+
+      .odis-customer-site .site-nav-links {
+        justify-content: flex-start;
+        max-width: 100%;
+      }
+
+      .odis-customer-site .site-top-nav-actions {
+        justify-self: end;
+      }
+
+      .odis-landing .hero {
+        padding-top: 136px;
+      }
+    }
+
+@media (max-width: 520px) {
+      .odis-customer-site .site-top-nav {
+        padding-inline: 12px;
+      }
+
+      .odis-customer-site .site-nav-glass {
+        max-width: calc(100vw - 24px);
+      }
+
+      .odis-customer-site .site-nav-link {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .odis-customer-site .site-nav-link-wrap:nth-child(3),
+      .odis-customer-site .site-nav-link-wrap:nth-child(4) {
+        display: none;
+      }
+
+      .odis-landing .nav-cta {
+        padding-inline: 12px;
+        font-size: 12px;
+      }
+
+      .odis-landing .hero {
+        padding-top: 128px;
+      }
+    }
+
+.odis-customer-site.has-glass-nav .speise-header {
+      padding-top: clamp(124px, 20vw, 150px);
+    }
+
+.odis-customer-site.has-glass-nav .site-page {
+      padding-top: clamp(132px, 20vw, 156px);
+    }
+
+.odis-flow-shell {
+      min-height: 100dvh;
+      background:
+        radial-gradient(70% 70% at 80% 0%, rgba(255, 167, 38, 0.09), transparent 66%),
+        radial-gradient(64% 64% at 0% 100%, rgba(76, 175, 80, 0.10), transparent 68%),
+        linear-gradient(180deg, #0a0d0a 0%, #0e1410 100%) !important;
+      color: #fff;
+    }
+
+.odis-flow-header {
+      background: rgba(14, 20, 16, 0.66) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13) !important;
+      box-shadow:
+        0 12px 34px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px) saturate(1.25);
+      -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    }
+
+.odis-flow-header h1,
+.odis-flow-header p {
+      color: rgba(255, 255, 255, 0.92) !important;
+      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.28);
+    }
+
+.odis-flow-header a span:first-child,
+.odis-flow-header button {
+      background: rgba(255, 255, 255, 0.10) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      color: #fff !important;
+    }
+
+.odis-flow-header > div > div,
+.odis-flow-header .rounded-full {
+      background: rgba(255, 167, 38, 0.13) !important;
+      border: 1px solid rgba(255, 167, 38, 0.22) !important;
+      color: rgba(255, 167, 38, 0.98) !important;
+    }
+
+.odis-flow-header nav button {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      color: rgba(255, 255, 255, 0.78) !important;
+    }
+
+.odis-flow-header nav button.is-active {
+      background: linear-gradient(135deg, var(--g-cta), var(--g-cta-deep)) !important;
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.16) !important;
+    }
+
+.odis-flow-step-head h2 {
+      color: #fff !important;
+    }
+
+.odis-flow-step-head p {
+      color: rgba(255, 255, 255, 0.64) !important;
+    }
+
+.odis-flow-step-head span {
+      color: rgba(255, 167, 38, 0.95) !important;
+    }
+
 /* Platzhalter-Unterseiten: Abstand unter fixierter Top-Nav */
 .odis-customer-site .site-page {
       padding: clamp(88px, 14vw, 112px) 18px 48px;
@@ -371,8 +533,8 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
 .odis-landing .hero {
       /* Fallback, sichtbar bis Bilder aus public/ laden */
       background: var(--g-hero);
-      padding: 50px 22px 72px;
-      padding-top: clamp(56px, 14vw, 88px);
+      padding: 50px 22px 76px;
+      padding-top: clamp(72px, 12vw, 98px);
       text-align: center;
       position: relative;
       min-height: min(92vh, 720px);
@@ -449,13 +611,48 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
 
 .odis-landing .hero::after {
       content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 54px;
-      background: var(--g-hero);
-      border-radius: 60% 60% 0 0 / 100% 100% 0 0;
+      height: 74px;
+      background: linear-gradient(180deg, rgba(10, 13, 10, 0), #0a0d0a 76%);
+      border-radius: 0;
       z-index: 4;
     }
 
-.odis-landing .hero-inner { position: relative; z-index: 3; }
+.odis-landing {
+      background: #0a0d0a;
+    }
+
+.odis-landing .hero-inner {
+      position: relative;
+      z-index: 3;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+.odis-landing .hero-brand {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 20px;
+      padding: 7px 16px 7px 9px;
+      border-radius: var(--r-full);
+      background: rgba(255, 255, 255, 0.08);
+      border: 0.5px solid rgba(255, 255, 255, 0.2);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px) saturate(1.35);
+      -webkit-backdrop-filter: blur(14px) saturate(1.35);
+      opacity: 0;
+      animation: odisLand_textmarkIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+    }
+
+.odis-landing .hero-brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.25));
+    }
 
 .odis-landing .hero-logo {
       display: block;
@@ -495,16 +692,14 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
 .odis-landing .hero-textmark {
       display: block;
       font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(22px, 4.5vw, 30px);
+      font-size: clamp(18px, 3.4vw, 25px);
       font-weight: 800;
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.92);
       text-align: center;
-      margin: 0 auto 22px;
+      margin: 0;
       text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      animation: odisLand_textmarkIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
     }
 
 @keyframes odisLand_textmarkIn {
@@ -525,74 +720,80 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
 
 .odis-landing .hero-headline {
       font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(36px, 9vw, 56px);
+      font-size: clamp(40px, 7.2vw, 66px);
       font-weight: 900; color: #fff;
-      line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 14px;
+      line-height: 1.02; letter-spacing: 0; margin: 0 auto 14px;
       text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45),
                    0 1px 3px rgba(0, 0, 0, 0.35);
     }
 
-.odis-landing .hero-headline .word { display: block; position: relative; }
+.odis-landing .hero-headline .word {
+      display: inline-block;
+      position: relative;
+      margin-inline: 0.04em;
+    }
 
 .odis-landing .hero-headline .w2 { z-index: 1; }
 
-.odis-landing .hero-headline .w1 { animation: odisLand_wUp 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+.odis-landing .hero-headline .w1 { animation: odisLand_wUp 0.48s cubic-bezier(0.22,1,0.36,1) both; }
 
-.odis-landing .hero-headline .w3 { animation: odisLand_wUp 0.6s cubic-bezier(0.22,1,0.36,1) .20s both; }
+.odis-landing .hero-headline .w3 { animation: odisLand_wUp 0.48s cubic-bezier(0.22,1,0.36,1) .10s both; }
 
 @keyframes odisLand_wUp {
       from { opacity:0; transform: translateY(30px); }
       to   { opacity:1; transform: translateY(0); }
     }
 
-/* Einmaliger Spring-In für Glas-Badge „Lecker.“ beim Seitenaufruf */
+/* Einmaliger sanfter Akzent für das mittlere Slogan-Wort */
 @keyframes odisLand_leckerSpring {
       0% {
         opacity: 0;
-        transform: rotate(-2.5deg) scale(0.68) translateY(26px);
+        transform: scale(0.92) translateY(18px);
         filter: blur(4px);
       }
       52% {
         opacity: 1;
-        transform: rotate(-2.5deg) scale(1.1) translateY(-10px);
+        transform: scale(1.03) translateY(-4px);
         filter: blur(0);
       }
       72% {
-        transform: rotate(-2.5deg) scale(0.94) translateY(5px);
+        transform: scale(0.98) translateY(2px);
       }
       88% {
-        transform: rotate(-2.5deg) scale(1.03) translateY(-2px);
+        transform: scale(1.01) translateY(-1px);
       }
       100% {
         opacity: 1;
-        transform: rotate(-2.5deg) scale(1) translateY(0);
+        transform: scale(1) translateY(0);
         filter: blur(0);
       }
     }
 
 .odis-landing .hero-headline em {
       font-style: normal;
-      font-size: 1.15em;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px) saturate(1.4);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-      border: 0.5px solid rgba(255, 255, 255, 0.25);
-      box-shadow:
-        inset 0 0.5px 0 rgba(255, 255, 255, 0.3),
-        inset 0 0 0 0.5px rgba(255, 255, 255, 0.08),
-        0 4px 16px rgba(0, 0, 0, 0.1);
-      padding: 10px 22px 12px;
-      border-radius: 22px;
+      color: #fff4cf;
       display: inline-block;
-      transform: rotate(-2.5deg);
-      margin: -8px 0;
       position: relative;
       z-index: 1;
     }
 
+.odis-landing .hero-headline em::after {
+      content: "";
+      position: absolute;
+      left: 0.08em;
+      right: 0.08em;
+      bottom: 0.02em;
+      height: 0.12em;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255, 167, 38, 0), rgba(255, 167, 38, 0.92), rgba(76, 175, 80, 0));
+      opacity: 0.72;
+      filter: blur(0.3px);
+      z-index: -1;
+    }
+
 .odis-landing .hero-headline .w2 em {
       transform-origin: center 60%;
-      animation: odisLand_leckerSpring 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+      animation: odisLand_leckerSpring 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
       will-change: transform, opacity, filter;
     }
 
@@ -600,7 +801,7 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
       .odis-landing .hero-headline .w2 em {
         animation: none;
         opacity: 1;
-        transform: rotate(-2.5deg);
+        transform: none;
         filter: none;
         will-change: auto;
       }
@@ -612,27 +813,81 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
       text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
     }
 
+@media (max-width: 640px) {
+      .odis-landing .hero {
+        padding-top: 146px;
+      }
+
+      .odis-landing .hero-headline {
+        font-size: clamp(39px, 13vw, 62px);
+      }
+
+      .odis-landing .hero-headline .word {
+        display: block;
+      }
+    }
+
+@media (max-width: 520px) {
+      .odis-landing .hero {
+        padding-top: 136px;
+      }
+    }
+
 .odis-landing .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin: 0 auto 20px;
-      max-width: min(560px, 100%);
+      margin: 14px auto 18px;
+      max-width: min(560px, calc(100vw - 32px));
+      padding: 8px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.045));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+      backdrop-filter: blur(18px) saturate(1.25);
+      -webkit-backdrop-filter: blur(18px) saturate(1.25);
     }
 
 .odis-landing .hero-meta-item {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      justify-content: flex-start;
+      gap: 10px;
       color: rgba(255,255,255,0.90);
-      background: rgba(0, 0, 0, 0.16);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-size: 13px;
+      background: rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px;
+      padding: 10px 12px;
+      font-size: 12px;
       line-height: 1.4;
+      text-align: left;
       text-shadow: 0 1px 12px rgba(0, 0, 0, 0.25);
+    }
+
+.odis-landing .hero-meta-item strong {
+      display: block;
+      font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: rgba(255, 167, 38, 0.92);
+      margin-bottom: 2px;
+    }
+
+.odis-landing .hero-meta-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      border-radius: 12px;
+      background: rgba(255, 167, 38, 0.12);
+      border: 1px solid rgba(255, 167, 38, 0.22);
     }
 
 .odis-landing .hero-meta-link {
@@ -642,6 +897,22 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
 
 .odis-landing .hero-meta-link:hover {
       text-decoration: underline;
+    }
+
+@media (max-width: 520px) {
+      .odis-landing .hero-brand {
+        gap: 9px;
+        padding: 7px 12px 7px 8px;
+      }
+
+      .odis-landing .hero-brand-mark {
+        width: 40px;
+        height: 40px;
+      }
+
+      .odis-landing .hero-meta {
+        grid-template-columns: 1fr;
+      }
     }
 
 .odis-landing .hero-whatsapp {
@@ -1345,7 +1616,24 @@ html.dark .odis-landing footer .footer-links a:hover {
 .odis-landing .info-row p { font-size: 12px; color: var(--text-2); }
 
 .odis-landing .order-section {
-      padding: 8px 14px 36px; display: flex; flex-direction: column; gap: 10px;
+      padding: 48px 14px 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background:
+        radial-gradient(44% 64% at 50% 0%, rgba(76, 175, 80, 0.10), transparent 72%),
+        linear-gradient(180deg, #0d130f 0%, #091009 100%);
+    }
+
+.odis-landing .order-section .btn-cta-lg,
+.odis-landing .order-section .btn-direct,
+.odis-landing .order-section .btn-wa {
+      color: #fff;
+    }
+
+.odis-landing .order-section .btn-cta-lg small,
+.odis-landing .order-section .btn-direct small {
+      color: rgba(255,255,255,0.78);
     }
 
 .odis-landing .btn-cta-lg {
@@ -1448,11 +1736,11 @@ html.dark .odis-landing footer .footer-links a:hover {
 .odis-landing .order-divider::before,
     .odis-landing .order-divider::after {
       content: ''; flex: 1; height: 1px;
-      background: var(--border);
+      background: rgba(255,255,255,0.11);
     }
 
 .odis-landing .order-divider span {
-      font-size: 12px; color: var(--text-3); font-weight: 600;
+      font-size: 12px; color: rgba(255,255,255,0.42); font-weight: 600;
       white-space: nowrap; padding: 0 4px;
     }
 
@@ -1539,7 +1827,9 @@ html.dark .odis-landing .nav-cta:active {
       background: rgba(255, 255, 255, 0.12);
     }
 
-html.dark .odis-landing .hero::after { background: var(--g-hero); }
+html.dark .odis-landing .hero::after {
+      background: linear-gradient(180deg, rgba(10, 13, 10, 0), #0a0d0a 76%);
+    }
 
 html.dark .odis-landing .hero-backdrop-scrim {
       background: linear-gradient(
@@ -2381,9 +2671,11 @@ html.dark .odis-landing .info-ico {
 .odis-landing .social-proof-section {
   text-align: center;
   padding: 48px 24px 40px;
-  background: var(--surface, #fff);
-  border-top: 1px solid var(--border-soft, #e8f5ea);
-  border-bottom: 1px solid var(--border-soft, #e8f5ea);
+  background:
+    radial-gradient(50% 60% at 50% 0%, rgba(255, 167, 38, 0.08), transparent 68%),
+    linear-gradient(180deg, #0a0d0a 0%, #0d130f 100%);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .odis-landing .sp-stars {
@@ -2401,7 +2693,7 @@ html.dark .odis-landing .info-ico {
   font-family: var(--font-landing-jakarta, 'Plus Jakarta Sans', sans-serif);
   font-size: 36px;
   font-weight: 900;
-  color: var(--dark, #0a1f0d);
+  color: #fff;
   line-height: 1;
   margin-bottom: 4px;
 }
@@ -2409,12 +2701,12 @@ html.dark .odis-landing .info-ico {
 .odis-landing .sp-score-max {
   font-size: 20px;
   font-weight: 500;
-  color: var(--text-3, #8aab8e);
+  color: rgba(255,255,255,0.45);
 }
 
 .odis-landing .sp-label {
   font-size: 13px;
-  color: var(--text-2, #4b6b50);
+  color: rgba(255,255,255,0.58);
   margin-bottom: 24px;
   font-weight: 500;
 }
@@ -2433,11 +2725,11 @@ html.dark .odis-landing .info-ico {
   gap: 5px;
   font-size: 13px;
   font-weight: 600;
-  color: #16a34a;
+  color: rgba(255, 255, 255, 0.74);
 }
 
 .odis-landing .sp-trust-sep {
-  color: var(--border, #d1ecd8);
+  color: rgba(255,255,255,0.16);
   font-size: 16px;
 }
 
@@ -2895,6 +3187,339 @@ html.dark .odis-landing .vip-benefit-item {
   font-weight: 500;
 }
 
+/* Dark premium section language shared by VIP, menu and order flow */
+.odis-landing .vip-section,
+.odis-landing .menu-showcase {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(58% 72% at 78% 8%, rgba(255, 167, 38, 0.10), transparent 68%),
+    radial-gradient(48% 64% at 8% 88%, rgba(76, 175, 80, 0.09), transparent 70%),
+    linear-gradient(180deg, #0a0d0a 0%, #0e1410 48%, #0a0d0a 100%);
+}
+
+.odis-landing .vip-section {
+  padding: 76px 14px 72px;
+}
+
+.odis-landing .vip-section::before,
+.odis-landing .menu-showcase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 24%, rgba(255, 255, 255, 0.035) 0%, transparent 38%),
+    radial-gradient(circle at 86% 78%, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.odis-landing .vip-cta-card,
+.odis-landing .vip-dash {
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  margin: 0 auto;
+  border-radius: 28px;
+  padding: clamp(24px, 5vw, 38px);
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.032));
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 56px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(16px) saturate(1.25);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+}
+
+.odis-landing .vip-cta-card::before,
+.odis-landing .vip-dash::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 28px;
+  right: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 167, 38, 0.95), transparent);
+  opacity: 0.85;
+}
+
+.odis-landing .vip-cta-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.65fr);
+  gap: clamp(20px, 5vw, 34px);
+  align-items: stretch;
+}
+
+.odis-landing .vip-cta-copy {
+  min-width: 0;
+}
+
+.odis-landing .vip-cta-top {
+  margin-bottom: 22px;
+}
+
+.odis-landing .vip-cta-badge {
+  color: rgba(255, 167, 38, 0.95);
+  background: rgba(255, 167, 38, 0.12);
+  border: 1px solid rgba(255, 167, 38, 0.22);
+  box-shadow: none;
+}
+
+.odis-landing .vip-cta-title {
+  max-width: 620px;
+  color: #fff;
+  font-size: clamp(28px, 7vw, 48px);
+  letter-spacing: -0.9px;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+}
+
+.odis-landing .vip-cta-em {
+  color: #fff;
+}
+
+.odis-landing .vip-cta-sub {
+  max-width: 590px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 15px;
+}
+
+.odis-landing .vip-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 26px;
+}
+
+.odis-landing .vip-benefit-item {
+  align-items: flex-start;
+  min-height: 92px;
+  padding: 18px 16px;
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.86);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.024));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.odis-landing .vip-benefit-check {
+  color: rgba(255, 167, 38, 0.95);
+  background: rgba(255, 167, 38, 0.12);
+  border-color: rgba(255, 167, 38, 0.22);
+}
+
+.odis-landing .vip-preview-card {
+  position: relative;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 22px;
+  border-radius: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(74% 86% at 80% 0%, rgba(255, 167, 38, 0.18), transparent 66%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 16px 40px rgba(0, 0, 0, 0.24);
+}
+
+.odis-landing .vip-preview-card::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.odis-landing .vip-preview-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.odis-landing .vip-preview-top span {
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.odis-landing .vip-preview-top strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  height: 34px;
+  border-radius: 999px;
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 167, 38, 0.98);
+  background: rgba(255, 167, 38, 0.12);
+  border: 1px solid rgba(255, 167, 38, 0.22);
+}
+
+.odis-landing .vip-preview-stamps {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.odis-landing .vip-preview-stamps span {
+  aspect-ratio: 1;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.34);
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+.odis-landing .vip-preview-stamps span.is-filled {
+  color: rgba(255, 167, 38, 0.95);
+  background: rgba(255, 167, 38, 0.14);
+  border-style: solid;
+  border-color: rgba(255, 167, 38, 0.32);
+  box-shadow: 0 8px 22px rgba(255, 167, 38, 0.08);
+}
+
+.odis-landing .vip-preview-card p {
+  position: relative;
+  z-index: 1;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.odis-landing .vip-cta-btn,
+.odis-landing .vip-dash-cta {
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--landing-cta, #e84e19), var(--landing-cta-deep, #b33b16));
+  box-shadow: 0 12px 34px rgba(232, 78, 25, 0.34);
+}
+
+.odis-landing .vip-cta-note {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.odis-landing .vip-dash-stats {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.odis-landing .vip-dash-stat.accent .vip-stat-val,
+.odis-landing .vip-dash-open-btn {
+  color: rgba(255, 167, 38, 0.95);
+}
+
+.odis-landing .vip-dash-open-btn {
+  background: rgba(255, 167, 38, 0.10);
+  border-color: rgba(255, 167, 38, 0.22);
+}
+
+.odis-landing .vip-stamp-slot.filled {
+  color: rgba(255, 167, 38, 0.95);
+  background: rgba(255, 167, 38, 0.14);
+  border-color: rgba(255, 167, 38, 0.34);
+}
+
+.odis-landing .menu-showcase {
+  padding: 12px 0 82px;
+}
+
+.odis-landing .menu-showcase .sec-head h2,
+.odis-landing .menu-showcase .prod-name {
+  color: #fff;
+}
+
+.odis-landing .menu-showcase .sec-head p,
+.odis-landing .menu-showcase .prod-desc {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.odis-landing .menu-showcase .products {
+  position: relative;
+  z-index: 1;
+}
+
+.odis-landing .menu-showcase .product-card {
+  color: #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.03));
+  border-color: rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 12px 34px rgba(0, 0, 0, 0.30);
+}
+
+.odis-landing .menu-showcase .prod-body {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.odis-landing .menu-showcase .konfig-card {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: linear-gradient(135deg, rgba(28, 96, 50, 0.92), rgba(14, 53, 25, 0.92));
+}
+
+@media (max-width: 720px) {
+  .odis-landing .vip-cta-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .odis-landing .menu-showcase {
+    padding-bottom: 58px;
+  }
+
+  .odis-landing .menu-showcase .products {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .odis-landing .menu-showcase .product-card {
+    flex-direction: row;
+    min-height: 132px;
+  }
+
+  .odis-landing .menu-showcase .prod-visual {
+    width: 132px;
+    min-height: 132px;
+    flex: 0 0 132px;
+  }
+
+  .odis-landing .menu-showcase .prod-body {
+    padding: 14px 14px 14px 12px;
+  }
+
+  .odis-landing .vip-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .odis-landing .vip-benefit-item {
+    min-height: unset;
+  }
+}
+
+@media (max-width: 420px) {
+  .odis-landing .menu-showcase .prod-visual {
+    width: 114px;
+    min-height: 124px;
+    flex-basis: 114px;
+  }
+
+  .odis-landing .menu-showcase .prod-btn {
+    padding-inline: 10px;
+  }
+}
+
 
 /* ============================================================
    HOW SECTION — rotierende Bowl
@@ -3042,3 +3667,239 @@ html.dark .odis-landing .vip-benefit-item {
   display: unset;
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   FLOW-STEPS  ·  "So einfach geht's" — Bowl-DNA, Glas-Karten
+   ───────────────────────────────────────────────────────────────── */
+.odis-landing .flow-steps {
+  position: relative;
+  padding: 88px 22px 96px;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 80% at 80% 0%, rgba(255, 167, 38, 0.10), transparent 70%),
+    radial-gradient(50% 70% at 0% 100%, rgba(76, 175, 80, 0.08), transparent 70%),
+    linear-gradient(180deg, #0e1410 0%, #0a0d0a 100%);
+}
+
+.odis-landing .flow-steps-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.odis-landing .flow-steps-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.odis-landing .flow-steps .sec-head h2 {
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+}
+
+.odis-landing .flow-steps .sec-head p {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.odis-landing .flow-steps-list {
+  list-style: none;
+  margin: 38px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  counter-reset: step-counter;
+}
+
+.odis-landing .flow-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 26px 22px 24px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.025) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+  overflow: hidden;
+}
+
+.odis-landing .flow-step::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 22px;
+  right: 22px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--g-cta-deep, #ff8a00), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.odis-landing .flow-step:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.odis-landing .flow-step:hover::before {
+  opacity: 1;
+}
+
+.odis-landing .flow-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: rgba(255, 167, 38, 0.95);
+  background: rgba(255, 167, 38, 0.12);
+  border: 1px solid rgba(255, 167, 38, 0.22);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.odis-landing .flow-step-icon {
+  font-size: 32px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 14px rgba(255, 167, 38, 0.3));
+}
+
+.odis-landing .flow-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.odis-landing .flow-step-label {
+  font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.odis-landing .flow-step-sub {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .odis-landing .flow-steps {
+    padding: 64px 16px 72px;
+  }
+  .odis-landing .flow-steps-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .odis-landing .flow-step {
+    flex-direction: row;
+    align-items: center;
+    padding: 18px 18px;
+  }
+  .odis-landing .flow-step-icon {
+    font-size: 28px;
+    margin-left: auto;
+  }
+  .odis-landing .flow-step-body {
+    flex: 1;
+    margin-top: 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SITE-PAGE  ·  Dark Premium für Karriere / Über uns / Subseiten
+   immer aktiv (nicht nur unter html.dark)
+   ───────────────────────────────────────────────────────────────── */
+.odis-customer-site .site-page {
+  --bg:          #0a0d0a;
+  --surface:     rgba(255, 255, 255, 0.05);
+  --dark:        #ffffff;
+  --text:        #ffffff;
+  --text-2:      rgba(255, 255, 255, 0.72);
+  --text-3:      rgba(255, 255, 255, 0.52);
+  --border:      rgba(255, 255, 255, 0.12);
+  --border-soft: rgba(255, 255, 255, 0.09);
+}
+
+.odis-landing:has(.site-page) {
+  background:
+    radial-gradient(58% 72% at 78% 8%, rgba(255, 167, 38, 0.10), transparent 68%),
+    radial-gradient(48% 64% at 8% 88%, rgba(76, 175, 80, 0.09), transparent 70%),
+    linear-gradient(180deg, #0a0d0a 0%, #0e1410 48%, #0a0d0a 100%);
+}
+
+/* Glas-Karten für die Subseiten-Boxen — dieselbe Sprache wie Landing */
+.odis-customer-site .site-box {
+  background: linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 22px;
+  padding: 22px 22px 24px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 12px 30px rgba(0,0,0,0.30);
+  backdrop-filter: blur(14px) saturate(1.25);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s;
+}
+
+.odis-customer-site .site-box:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.16);
+}
+
+.odis-customer-site .site-page .site-lead {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(255, 167, 38, 0.95);
+  margin-bottom: 12px;
+}
+
+.odis-customer-site .site-page .site-actions a {
+  color: rgba(255, 167, 38, 0.95);
+  border-bottom-color: rgba(255, 167, 38, 0.35);
+}
+
+.odis-customer-site .site-page .site-actions a:hover {
+  border-bottom-color: rgba(255, 167, 38, 0.85);
+}
+
+/* Glasige Top-Nav harmonisieren — auch ohne html.dark */
+.odis-customer-site .site-nav-glass {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 4px 22px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.odis-customer-site .site-nav-link {
+  color: #fff;
+}
+
+.odis-customer-site .site-nav-link.is-active {
+  background: rgba(255, 255, 255, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.odis-customer-site .site-nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}

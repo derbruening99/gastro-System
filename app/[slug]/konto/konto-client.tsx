@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { LogoutButton } from './logout-button'
+import { SiteNav } from '../landing/site-nav'
 
 const STAMPS_FOR_REWARD = 8
 
@@ -104,19 +105,15 @@ export function KontoClient({
   }
 
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#f0fdf4', minHeight: '100dvh', paddingBottom: 48 }}>
+    <div className="odis-landing odis-customer-site has-glass-nav" style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#0a0d0a', minHeight: '100dvh', paddingBottom: 48 }}>
+      <SiteNav
+        slug={slug}
+        restaurantName={tenantName}
+        isLoggedIn
+        userInitial={initial}
+      />
 
-      {/* ── HEADER ─────────────────────────────────────────────── */}
-      <header style={{ background: '#fff', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: '1px solid #d1fae5', position: 'sticky', top: 0, zIndex: 100 }}>
-        <Link href={`/${slug}`} style={{ width: 36, height: 36, background: '#f0fdf4', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, textDecoration: 'none', color: '#0f1a12', flexShrink: 0 }}>
-          ←
-        </Link>
-        <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 17, fontWeight: 800, flex: 1, color: '#0f1a12' }}>
-          Mein Bereich
-        </h1>
-      </header>
-
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '20px 16px' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '136px 16px 20px' }}>
 
         {/* ── WELCOME BANNER ─────────────────────────────────────── */}
         <div className="vip-reveal d1" style={{

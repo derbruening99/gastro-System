@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getTenant } from '@/lib/tenant'
 import TenantProvider from '@/contexts/tenant-context'
 import type { Metadata } from 'next'
+import type { Viewport } from 'next'
 
 // ─── Dynamische Metadata pro Tenant ───────────────────────────────────────────
 export async function generateMetadata({
@@ -17,7 +18,19 @@ export async function generateMetadata({
   return {
     title: tenant.name,
     description: `Bestell direkt bei ${tenant.name}`,
-    themeColor: tenant.primary_color,
+  }
+}
+
+export async function generateViewport({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Viewport> {
+  const { slug } = await params
+  const tenant = await getTenant(slug)
+
+  return {
+    themeColor: tenant?.primary_color ?? '#0f172a',
   }
 }
 

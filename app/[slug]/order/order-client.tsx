@@ -433,10 +433,10 @@ function CheckoutView({
   }
 
   return (
-    <div className="min-h-screen pb-12" style={{ background: '#f0fdf4', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="odis-flow-shell min-h-screen pb-12" style={{ background: '#f0fdf4', fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Header */}
       <header
-        className="sticky top-0 z-30 flex items-center gap-3 px-4"
+        className="odis-flow-header sticky top-0 z-30 flex items-center gap-3 px-4"
         style={{ background: '#fff', borderBottom: '1px solid #d1fae5', padding: '14px 16px' }}
       >
         <button
@@ -1070,7 +1070,7 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
 
       {/* Header */}
       <header
-        className="sticky top-0 z-30"
+        className="odis-flow-header sticky top-0 z-30"
         style={{ background: '#fff', borderBottom: '1px solid #d1fae5' }}
       >
         <div className="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
@@ -1134,7 +1134,7 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
                   setActiveCategory(cat.id)
                   document.getElementById(`cat-${cat.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
-                className="whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-semibold transition-all flex-shrink-0"
+                className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-semibold transition-all flex-shrink-0${isActive ? ' is-active' : ''}`}
                 style={
                   isActive
                     ? { background: '#22c55e', color: '#fff' }

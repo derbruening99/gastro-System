@@ -565,12 +565,12 @@ export default function KustomizerClient({ tenant }: { tenant: Restaurant }) {
 
   return (
     <div
-      className="min-h-screen pb-10"
+      className="odis-flow-shell min-h-screen pb-10"
       style={{ background: '#f0fdf4', fontFamily: 'Inter, system-ui, sans-serif' }}
     >
       {/* Header */}
       <header
-        className="sticky top-0 z-30 flex items-center gap-3 px-4 py-3.5"
+        className="odis-flow-header sticky top-0 z-30 flex items-center gap-3 px-4 py-3.5"
         style={{ background: '#fff', borderBottom: '1px solid #d1fae5' }}
       >
         <button
@@ -616,7 +616,7 @@ export default function KustomizerClient({ tenant }: { tenant: Restaurant }) {
         >
           {/* Step Header */}
           {!showSummary && (
-            <div className="mb-5">
+            <div className="odis-flow-step-head mb-5">
               <div style={{ fontSize: 36, marginBottom: 6 }}>
                 {showExtras ? '➕' : step.emoji}
               </div>

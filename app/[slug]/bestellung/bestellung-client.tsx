@@ -82,7 +82,7 @@ function PageHeader({
   const border  = dark ? '#1a3d28' : '#d1fae5'
   const text    = dark ? '#e8f5eb' : '#0f1a12'
   return (
-    <header style={{ background: surface, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: `1px solid ${border}`, position: 'sticky', top: 0, zIndex: 100 }}>
+    <header className="odis-flow-header" style={{ background: surface, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: `1px solid ${border}`, position: 'sticky', top: 0, zIndex: 100 }}>
       {onBack
         ? <button onClick={onBack} style={iconBtn(bg, text)}>←</button>
         : <Link href={`/${slug}/kustomizer`} style={{ ...iconBtn(bg, text), textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>←</Link>
@@ -280,7 +280,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
 
   if (!config) {
     return (
-      <div style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <div className="odis-flow-shell" style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif' }}>
         <style>{globalStyles}</style>
         <PageHeader title="Direkt bestellen" slug={slug} dark={dark} toggleDark={toggleDark} />
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '64px 24px', textAlign: 'center' }}>
@@ -297,9 +297,9 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
 
   if (step === 'success') {
     return (
-      <div style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', paddingBottom: 48 }}>
+      <div className="odis-flow-shell" style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', paddingBottom: 48 }}>
         <style>{globalStyles}</style>
-        <header style={{ background: surface, padding: '14px 20px', borderBottom: `1px solid ${border}` }}>
+        <header className="odis-flow-header" style={{ background: surface, padding: '14px 20px', borderBottom: `1px solid ${border}` }}>
           <h1 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 17, fontWeight: 800, color: text, margin: 0 }}>Bestellung eingegangen 🎉</h1>
         </header>
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '40px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
@@ -404,7 +404,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
   // ── Form ──────────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', paddingBottom: 48 }}>
+    <div className="odis-flow-shell" style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', paddingBottom: 48 }}>
       <style>{globalStyles}</style>
       <PageHeader title="Direkt bestellen" slug={slug} dark={dark} toggleDark={toggleDark} />
 
