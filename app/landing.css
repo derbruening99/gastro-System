@@ -1616,13 +1616,20 @@ html.dark .odis-landing footer .footer-links a:hover {
 .odis-landing .info-row p { font-size: 12px; color: var(--text-2); }
 
 .odis-landing .order-section {
-      padding: 48px 14px 56px;
+      padding: 56px 14px 64px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      align-items: center;       /* horizontal zentriert */
+      gap: 12px;
       background:
         radial-gradient(44% 64% at 50% 0%, rgba(76, 175, 80, 0.10), transparent 72%),
         linear-gradient(180deg, #0d130f 0%, #091009 100%);
+    }
+
+/* Buttons + Divider zentriert mit definierter Maximalbreite */
+.odis-landing .order-section > * {
+      width: 100%;
+      max-width: 480px;
     }
 
 .odis-landing .order-section .btn-cta-lg,
