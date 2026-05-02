@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getTenant } from '@/lib/tenant'
 import { getMenuByRestaurant } from '@/lib/menu'
@@ -11,9 +10,6 @@ import { MenuSection } from './landing/menu-section'
 import { ScrollEffects } from './landing/scroll-effects'
 import { SiteNav } from './landing/site-nav'
 import { VipSection } from './landing/vip-section'
-// Odi's-Bowl-Theme — neue 1:1-portierte Design-Variante. Wird konditional
-// pro Tenant geladen (vorerst nur slug = "odis-bowl").
-import { OdisBowlLandingPage } from '@/lib/themes/odis-bowl'
 
 export const dynamic = 'force-dynamic'
 
@@ -75,27 +71,11 @@ export default async function TenantLandingPage({
   if (!tenant) notFound()
 
   const menu = await getMenuByRestaurant(tenant.id)
-  // ─── Odi's-Bowl-Theme-Switch ───────────────────────────────────────────────
-  // Slug "odis-bowl" rendert die neue 1:1-portierte Design-Variante.
-  // Andere Tenants nutzen weiter die generische Landing-Page unten.
-  if (slug === 'odis-bowl') {
-    const phoneDigits = tenant.phone?.replace(/\D/g, '')
-    return (
-      <OdisBowlLandingPage
-        basePath={`/${slug}`}
-        whatsappPhone={phoneDigits || undefined}
-        whatsappGreeting={`Hallo ${tenant.name}, ich möchte bestellen:\n\n`}
-        location={tenant.address || undefined}
-        brandFooter={tenant.name}
-        menu={menu}
-      />
-    )
-  }
 
   const accent = tenant.primary_color
   const orderHref = `/${slug}/order`
   const kustomizerHref = `/${slug}/kustomizer`
-  const logoUrl = tenant.logo_url ?? '/logo.png'
+  const logoUrl = tenant.logo_url ?? '/Bowl_Logo.png'
   const userInitial = user?.email?.charAt(0).toUpperCase()
 
   const phoneHref = tenant.phone
@@ -125,8 +105,8 @@ export default async function TenantLandingPage({
           <HeroLogo restaurantName={tenant.name} logoUrl={logoUrl} />
           <h1 className="hero-headline">
             <span className="word w1">Frisch.</span>
-            <span className="word w2"><em>Lecker.</em></span>
-            <span className="word w3">Direkt.</span>
+            <span className="word w2">Lecker.</span>
+            <span className="word w3"><em>Deine Bowl.</em></span>
           </h1>
           <p className="hero-sub">
             Selbst gemacht schmeckt besser. Bestell dein Essen in 60 Sekunden.

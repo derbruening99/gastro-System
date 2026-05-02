@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type { MenuCategory } from '@/lib/types'
 
@@ -82,13 +81,24 @@ export function MenuSection({ menu, slug }: Props) {
           >
             {/* ── Foto-Bereich ── */}
             <div className={`prod-visual prod-visu-${variant}`}>
-              <Image
+              {/* Native <img> statt next/image — umgeht Vercel Image-Optimization
+                  Bug, der dazu führte, dass Produktfotos als Emoji-Fallback
+                  gerendert wurden. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={getPhoto(index)}
                 alt={item.name}
-                fill
-                sizes="(max-width:600px) 100vw, 340px"
+                loading="lazy"
+                decoding="async"
                 className="prod-visual-img"
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
               />
               {badge && (
                 <span className={`prod-badge badge-${badge}`}>

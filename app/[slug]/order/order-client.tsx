@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useTransition, useEffect } from 'react'
+import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { OneClickReorder } from './one-click-reorder'
 import type {
@@ -1073,14 +1074,35 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
         style={{ background: '#fff', borderBottom: '1px solid #d1fae5' }}
       >
         <div className="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
-          <div>
-            <h1 className="font-black" style={{ fontSize: 19, color: '#15803d' }}>
-              {tenant.name}
-            </h1>
-            {table && (
-              <p className="text-xs mt-0.5" style={{ color: '#6b7c72' }}>Tisch {table}</p>
-            )}
-          </div>
+          <Link
+            href={`/${tenant.slug}`}
+            aria-label={`Zurück zur Startseite von ${tenant.name}`}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+          >
+            <span
+              aria-hidden
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                width: 28, height: 28, borderRadius: 999,
+                background: '#f0fdf4', color: '#15803d', flexShrink: 0,
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+            </span>
+            <span>
+              <h1 className="font-black" style={{ fontSize: 19, color: '#15803d', margin: 0 }}>
+                {tenant.name}
+              </h1>
+              {table ? (
+                <p className="text-xs mt-0.5" style={{ color: '#6b7c72', margin: 0 }}>Tisch {table}</p>
+              ) : (
+                <p className="text-xs mt-0.5" style={{ color: '#6b7c72', margin: 0 }}>Bestellseite</p>
+              )}
+            </span>
+          </Link>
           {cart.length > 0 && (
             <div
               className="text-xs font-bold px-3 py-1 rounded-full"

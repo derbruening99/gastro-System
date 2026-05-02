@@ -1,31 +1,20 @@
 'use client'
 
-import { useCallback, useState } from 'react'
-
 type Props = { restaurantName: string; logoUrl?: string }
 
-export function HeroLogo({ restaurantName, logoUrl }: Props) {
-  const [useFallback, setUseFallback] = useState(false)
-  const onError = useCallback(() => setUseFallback(true), [])
-
-  if (useFallback) {
-    return (
-      <div className="hero-fallback-brand">
-        <div className="hero-tag">{restaurantName}</div>
-        <span className="hero-bowl" aria-hidden>🥣</span>
-      </div>
-    )
-  }
-
+/**
+ * HeroLogo — Pure Text-Brand
+ *
+ * Bewusst KEIN Logo-Bild mehr. Hintergrund: Logos die einen Slogan-Text als
+ * Teil der Grafik enthalten verursachen Slogan-Doppelung mit der h1-Headline.
+ * Wir zeigen den Restaurantnamen typografisch als reine Wortmarke. Wenn ein
+ * dediziertes slogan-freies Logo-Bild gewünscht ist, kann hier ein <img>
+ * ergänzt werden — aktuell ist die Text-Marke der saubere Default.
+ */
+export function HeroLogo({ restaurantName }: Props) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={logoUrl ?? '/logo.png'}
-      alt={restaurantName}
-      className="hero-logo"
-      width={620}
-      height={234}
-      onError={onError}
-    />
+    <div className="hero-textmark" aria-label={restaurantName}>
+      {restaurantName}
+    </div>
   )
 }

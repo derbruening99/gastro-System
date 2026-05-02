@@ -79,9 +79,9 @@ export function CustomerSiteNav({ basePath = "" }: Props) {
   const home = basePath || "/";
   const items = [
     { href: `${basePath}/speisekarte`, label: "Menü" },
-    { href: `${basePath}/ueber-uns`, label: "Über uns" },
-    { href: `${basePath}/karriere`, label: "Karriere" },
     { href: `${basePath}/unser-laden`, label: "Unser Laden" },
+    { href: `${basePath}/karriere`, label: "Karriere" },
+    { href: `${basePath}/order`, label: "Bestellen", primary: true as const },
   ];
   const isHome = pathname === home || pathname === `${basePath}` || pathname === `${basePath}/`;
   const standortHref = `${basePath}/unser-laden`;
@@ -121,12 +121,13 @@ export function CustomerSiteNav({ basePath = "" }: Props) {
           {items.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const primaryClass = "primary" in item && item.primary ? " site-nav-link--primary" : "";
 
             return (
               <span key={item.href} className="site-nav-link-wrap">
                 <Link
                   href={item.href}
-                  className={`site-nav-link${isActive ? " is-active" : ""}`}
+                  className={`site-nav-link${isActive ? " is-active" : ""}${primaryClass}`}
                   {...(isActive ? { "aria-current": "page" as const } : {})}
                 >
                   {item.label}

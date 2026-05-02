@@ -45,6 +45,7 @@ const DEFAULTS: Required<Omit<OdisBowlLandingProps, "basePath">> = {
     datenschutz: "https://odis-bowl.de/datenschutz",
     instagram: "https://www.instagram.com/odis.bowl/",
   },
+  menu: [],
 };
 
 /**
@@ -61,10 +62,11 @@ export function OdisBowlLanding({
   openingHours = DEFAULTS.openingHours,
   brandFooter = DEFAULTS.brandFooter,
   externalLinks = DEFAULTS.externalLinks,
+  menu = [],
 }: OdisBowlLandingProps) {
   const orderHref = `${basePath}/order`;
   const accountHref = `${basePath}/konto`;
-  const previewItems = (menu ?? []).flatMap((category) => category.items).slice(0, 6);
+  const previewItems = menu.flatMap((category) => category.items).slice(0, 6);
   const waUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
     whatsappGreeting,
   )}`;

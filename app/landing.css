@@ -194,6 +194,32 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
+/* Primärer „Bestellen"-CTA in der Glas-Nav — accent-getrieben, persistente Hierarchie */
+.odis-customer-site .site-nav-link.site-nav-link--primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--g-cta), var(--g-cta-deep));
+      box-shadow: 0 3px 12px rgba(34, 197, 94, 0.35),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      padding: 9px 17px;
+    }
+
+.odis-customer-site .site-nav-link.site-nav-link--primary:hover {
+      background: linear-gradient(135deg, var(--g-cta-deep), var(--g-cta));
+      box-shadow: 0 5px 18px rgba(34, 197, 94, 0.45),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+
+.odis-customer-site .site-nav-link.site-nav-link--primary.is-active {
+      color: #fff;
+      background: var(--g-cta-deep);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+.odis-landing .site-top-nav--hero .site-nav-link.site-nav-link--primary {
+      color: #fff;
+      text-shadow: none;
+    }
+
 /* Startseite (dunkler Hero): helle Schrift wie .btn-ghost */
 .odis-landing .site-top-nav--hero .site-nav-link {
       color: rgba(255, 255, 255, 0.9);
@@ -463,6 +489,27 @@ html:has(.odis-landing) { scroll-behavior: smooth; }
       font-size: 11px; font-weight: 700;
       letter-spacing: 1.8px; text-transform: uppercase;
       padding: 5px 14px; border-radius: var(--r-full); margin-bottom: 18px;
+    }
+
+/* Pure Text-Brand statt Logo-Bild — kein Slogan, nur Restaurantname */
+.odis-landing .hero-textmark {
+      display: block;
+      font-family: var(--font-landing-jakarta), 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(22px, 4.5vw, 30px);
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.92);
+      text-align: center;
+      margin: 0 auto 22px;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      animation: odisLand_textmarkIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+    }
+
+@keyframes odisLand_textmarkIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
 .odis-landing .hero-bowl {

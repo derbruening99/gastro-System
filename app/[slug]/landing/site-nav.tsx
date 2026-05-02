@@ -33,12 +33,22 @@ export function SiteNav({ slug, restaurantName, isLoggedIn, userInitial }: Props
             </Link>
           </div>
           <div className="site-nav-link-wrap">
-            <Link href={`/${slug}/#bestellen`} className="site-nav-link">
-              Menü
+            <Link href={`/${slug}/speisekarte`} className="site-nav-link">
+              Speisekarte
             </Link>
           </div>
           <div className="site-nav-link-wrap">
-            <Link href={`/${slug}/order`} className="site-nav-link">
+            <Link href={`/${slug}/unser-laden`} className="site-nav-link">
+              Unser Laden
+            </Link>
+          </div>
+          <div className="site-nav-link-wrap">
+            <Link href={`/${slug}/karriere`} className="site-nav-link">
+              Karriere
+            </Link>
+          </div>
+          <div className="site-nav-link-wrap">
+            <Link href={`/${slug}/order`} className="site-nav-link site-nav-link--primary">
               Bestellen
             </Link>
           </div>

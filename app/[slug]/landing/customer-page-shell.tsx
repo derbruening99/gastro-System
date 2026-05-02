@@ -1,7 +1,6 @@
 'use server'
 
-import { getSession } from '@/lib/auth'
-import { SiteNav } from './site-nav'
+import { CustomerSiteNav } from '@/lib/themes/odis-bowl'
 import type { ReactNode } from 'react'
 
 type Props = {
@@ -12,20 +11,15 @@ type Props = {
 
 export default async function CustomerPageShell({
   slug,
+  // restaurantName wird aktuell nicht im Shell gerendert — die Nav zeigt
+  // bereits den Standort/Brand. Prop bleibt für API-Kompatibilität bestehen.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   restaurantName,
   children,
 }: Props) {
-  const user = await getSession()
-  const userInitial = user?.email?.charAt(0).toUpperCase()
-
   return (
-    <div className="odis-customer-site">
-      <SiteNav
-        slug={slug}
-        restaurantName={restaurantName}
-        isLoggedIn={!!user}
-        userInitial={userInitial}
-      />
+    <div className="odis-customer-site odis-landing">
+      <CustomerSiteNav basePath={`/${slug}`} />
       {children}
     </div>
   )
