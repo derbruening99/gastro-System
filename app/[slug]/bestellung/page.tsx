@@ -21,13 +21,16 @@ export default async function BestellungPage({
 
   const tenant = await getTenant(slug)
   if (!tenant) notFound()
+  const displayAddress = slug === 'odis-bowl'
+    ? 'Borneplatz 2, 48431 Rheine'
+    : tenant.address
 
   return (
     <BestellungClient
       slug={slug}
       tenantName={tenant.name}
       tenantPhone={tenant.phone ?? null}
-      tenantAddress={tenant.address ?? null}
+      tenantAddress={displayAddress ?? null}
       defaultOrderType={parseMode(mode)}
       defaultTable={table ?? null}
     />

@@ -12,10 +12,10 @@ export default async function OrderPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ t?: string; table?: string; scan_id?: string }>
+  searchParams: Promise<{ t?: string; table?: string; scan_id?: string; item?: string }>
 }) {
   const { slug } = await params
-  const { t, table: tableParam, scan_id } = await searchParams
+  const { t, table: tableParam, scan_id, item } = await searchParams
   const table = t || tableParam
 
   // Tenant nochmal laden (via React cache → kein extra DB-Hit, layout hat gecacht)
@@ -35,6 +35,7 @@ export default async function OrderPage({
       upsells={upsells}
       table={table ?? null}
       scanId={scan_id ?? null}
+      initialItemId={item ?? null}
     />
   )
 }

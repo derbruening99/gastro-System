@@ -3,20 +3,19 @@ import type { MenuCategory, MenuItem } from '@/lib/types'
 
 // Produktfoto-Pool aus /public/products/ (Odi's Bowl Rheine)
 const PHOTO_POOL = [
-  '/products/IMG_4092.JPG',
   '/products/IMG_4089.JPG',
-  '/products/IMG_4096.JPG',
-  '/products/IMG_4094.JPG',
-  '/products/IMG_4099.JPG',
-  '/products/IMG_4095.JPG',
-  '/products/IMG_4100.JPG',
-  '/products/IMG_4088.JPG',
   '/products/IMG_4090.JPG',
+  '/products/IMG_4095.JPG',
+  '/products/IMG_4096.JPG',
   '/products/IMG_4097.JPG',
-  '/products/IMG_4091.JPG',
-  '/products/IMG_4093.JPG',
-  '/products/IMG_4098.JPG',
+  '/products/IMG_4099.JPG',
+  '/products/IMG_4100.JPG',
   '/products/IMG_4101.JPG',
+  '/products/IMG_4091.JPG',
+  '/products/IMG_4092.JPG',
+  '/products/IMG_4093.JPG',
+  '/products/IMG_4094.JPG',
+  '/products/IMG_4098.JPG',
 ]
 
 type Variant = 'featured' | 'vegan' | 'chicken'
@@ -142,8 +141,8 @@ export function MenuSection({ menu, slug }: Props) {
               />
               {badge && (
                 <span className={`prod-badge badge-${badge}`}>
-                  {badge === 'hit' && '🔥 Hit'}
-                  {badge === 'vegan' && '🌱 Vegan'}
+                  {badge === 'hit' && 'Favorit'}
+                  {badge === 'vegan' && 'Plant-based'}
                   {badge === 'new' && 'Neu'}
                 </span>
               )}
@@ -151,13 +150,16 @@ export function MenuSection({ menu, slug }: Props) {
 
             {/* ── Text-Bereich ── */}
             <div className="prod-body">
+              <span className="prod-kicker">
+                {index === 0 ? 'Odi’s Auswahl' : 'Signature Bowl'}
+              </span>
               <h4 className="prod-name">{item.name}</h4>
               {item.description && (
                 <p className="prod-desc">{item.description}</p>
               )}
               <div className="prod-footer">
                 <span className="prod-price">{formatPrice(Number(item.price))}</span>
-                <span className="prod-btn">Bestellen →</span>
+                <span className="prod-btn">Wählen</span>
               </div>
             </div>
           </Link>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ThemeToggle } from './theme-toggle'
 
 type Props = {
   slug: string
@@ -77,22 +78,32 @@ export function SiteNav({ slug, isLoggedIn, userInitial }: Props) {
 
       {/* Rechte Seite — Mein Bereich / Login */}
       <div className="site-top-nav-actions">
-        {isLoggedIn ? (
-          <Link href={`/${slug}/konto`} className="nav-cta" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900 }}>
-              {userInitial ?? '•'}
-            </span>
-            Mein Bereich
-          </Link>
-        ) : (
-          <Link href={`/${slug}/auth`} className="nav-cta" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
+        <div className="nav-quick-actions">
+          <ThemeToggle />
+
+          <Link href={`/${slug}/order`} className="nav-icon-btn nav-icon-btn--cart" aria-label="Warenkorb öffnen">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <circle cx="8" cy="21" r="1" />
+              <circle cx="19" cy="21" r="1" />
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h8.72a2 2 0 0 0 1.95-1.57l1.2-5.43H5.12" />
             </svg>
-            Mein Bereich
           </Link>
-        )}
+
+          {isLoggedIn ? (
+            <Link href={`/${slug}/konto`} className="nav-icon-btn nav-icon-btn--account" aria-label="Mein Bereich öffnen">
+              <span className="nav-user-initial" aria-hidden>
+                {userInitial ?? '•'}
+              </span>
+            </Link>
+          ) : (
+            <Link href={`/${slug}/auth`} className="nav-icon-btn nav-icon-btn--account" aria-label="Mein Bereich öffnen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
   )

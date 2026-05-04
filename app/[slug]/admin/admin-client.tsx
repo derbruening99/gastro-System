@@ -186,9 +186,12 @@ function PinLogin({ slug, tenantName, onSuccess }: { slug: string; tenantName: s
   return (
     <div className="admin-login-screen">
       <div className="admin-login-card">
-        <div className="admin-login-icon">🥗</div>
-        <h1>Admin-Login</h1>
-        <p className="admin-login-sub">{tenantName} · nur für autorisierte Mitarbeiter.</p>
+        {/* Brand icon — matches website .nav-logo-icon */}
+        <div className="admin-login-icon">
+          <div className="admin-login-icon-inner">🥗</div>
+        </div>
+        <h1>{tenantName}</h1>
+        <p className="admin-login-sub">Admin-Bereich · nur für autorisierte Mitarbeiter</p>
         {error && <p className="admin-login-alert admin-login-alert-error">{error}</p>}
         <form onSubmit={submit} className="admin-login-form">
           <input ref={inputRef} type="password" value={pin} onChange={e => { setPin(e.target.value); setError('') }}
@@ -521,16 +524,22 @@ export function AdminClient({ slug, tenantName }: { slug: string; tenantName: st
       <div className="admin-shell">
         {/* ── Sidebar ─────────────────────────────────── */}
         <aside className={`admin-sidebar${collapsed ? ' collapsed' : ''}`} suppressHydrationWarning>
-          {/* Brand */}
+          {/* Brand — website .nav-logo pattern */}
           <div className="admin-sidebar-brand"
             onClick={collapsed ? toggleSidebar : undefined}
             role={collapsed ? 'button' : undefined}
             tabIndex={collapsed ? 0 : undefined}
             title={collapsed ? 'Seitenleiste öffnen' : undefined}
             onKeyDown={collapsed ? e => { if (e.key === 'Enter' || e.key === ' ') toggleSidebar() } : undefined}>
-            <span style={{ fontFamily: 'var(--font-head)', fontSize: collapsed ? 20 : 14, fontWeight: 900, color: 'var(--accent-deep)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', letterSpacing: '-0.01em' }}>
-              {collapsed ? '🍃' : `🍃 ${tenantName}`}
-            </span>
+            <div className="admin-brand-logo">
+              <div className="admin-brand-icon">🥗</div>
+              {!collapsed && (
+                <div className="admin-brand-text">
+                  <span className="admin-brand-name">{tenantName}</span>
+                  <span className="admin-brand-sub">Admin</span>
+                </div>
+              )}
+            </div>
             {!collapsed && (
               <button type="button" onClick={e => { e.stopPropagation(); toggleSidebar() }} className="admin-sidebar-toggle" aria-label="Einklappen">
                 <svg style={{ width: 16, height: 16 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useTransition, useEffect } from 'react'
+import { useState, useCallback, useTransition, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { OneClickReorder } from './one-click-reorder'
@@ -27,15 +27,22 @@ const TIME_SLOTS = [
 
 type OrderType = 'pickup' | 'dine-in' | 'delivery'
 
-const ORDER_TYPES: { id: OrderType; emoji: string; label: string; sub: string }[] = [
-  { id: 'pickup',   emoji: '🥡', label: 'Abholen',       sub: 'Ich komme selbst vorbei' },
-  { id: 'dine-in',  emoji: '🪑', label: 'Vor Ort essen', sub: 'Ich bin bereits da / komme gleich' },
-  { id: 'delivery', emoji: '🛵', label: 'Liefern',       sub: 'Bitte an meine Adresse liefern' },
+const ORDER_TYPES: { id: OrderType; mark: string; label: string; sub: string }[] = [
+  { id: 'pickup',   mark: 'AB', label: 'Abholen',       sub: 'Ich komme selbst vorbei' },
+  { id: 'dine-in',  mark: 'TI', label: 'Vor Ort essen', sub: 'Ich bin bereits da / komme gleich' },
+  { id: 'delivery', mark: 'LI', label: 'Liefern',       sub: 'Bitte an meine Adresse liefern' },
 ]
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Props = { tenant: Restaurant; menu: MenuCategory[]; upsells: Upsell[]; table: string | null; scanId?: string | null }
+type Props = {
+  tenant: Restaurant
+  menu: MenuCategory[]
+  upsells: Upsell[]
+  table: string | null
+  scanId?: string | null
+  initialItemId?: string | null
+}
 type View = 'menu' | 'checkout' | 'success'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -60,15 +67,14 @@ function buildWhatsAppUrl(
   orderType?: OrderType | null,
   address?: string,
 ): string {
-  const typeEmoji = { pickup: '🥡', 'dine-in': '🪑', delivery: '🛵' }[orderType ?? 'pickup']
   const typeLabel = ORDER_TYPES.find(o => o.id === (orderType ?? 'pickup'))?.label ?? 'Abholen'
-  const lines = [`🍽️ Bestellung bei ${restaurantName}:`]
+  const lines = [`Bestellung bei ${restaurantName}:`]
   if (customerName) lines.push(`👤 ${customerName}`)
-  lines.push(`${typeEmoji} ${typeLabel}`)
+  lines.push(`Bestellart: ${typeLabel}`)
   if (orderType === 'pickup' && pickupTime) lines.push(`⏰ Abholung: ${pickupTime} Uhr`)
-  if (orderType === 'dine-in' && table) lines.push(`🪑 Tisch: ${table}`)
-  if (orderType === 'delivery' && address) lines.push(`📍 Lieferung an: ${address}${pickupTime ? ` um ${pickupTime} Uhr` : ''}`)
-  if (!orderType && table) lines.push(`📍 Tisch: ${table}`)
+  if (orderType === 'dine-in' && table) lines.push(`Tisch: ${table}`)
+  if (orderType === 'delivery' && address) lines.push(`Lieferung an: ${address}${pickupTime ? ` um ${pickupTime} Uhr` : ''}`)
+  if (!orderType && table) lines.push(`Tisch: ${table}`)
   if (!orderType && pickupTime) lines.push(`⏰ Abholung: ${pickupTime} Uhr`)
   lines.push('')
   let total = 0
@@ -229,7 +235,7 @@ function SummaryCard({ cart }: { cart: CartItem[] }) {
           background: 'radial-gradient(circle, rgba(34,197,94,0.22), transparent 70%)',
         }}
       />
-      <span style={{ fontSize: 28, display: 'block', marginBottom: 10 }}>🥣</span>
+      <span className="flow-card-mark" aria-hidden>BOWL</span>
       <h2 className="font-black text-white mb-1" style={{ fontSize: 18 }}>
         {count} {count === 1 ? 'Artikel' : 'Artikel'} in deiner Bestellung
       </h2>
@@ -317,7 +323,7 @@ function CartBar({
           >
             {count}×
           </span>
-          <span>Zur Kasse →</span>
+          <span>Zur Kasse</span>
           <span className="text-base font-black">{total.toFixed(2).replace('.', ',')} €</span>
         </button>
       </div>
@@ -486,7 +492,7 @@ function CheckoutView({
               style={{ background: '#fff', border: '1px solid #d1fae5' }}
             >
               <h3 className="font-extrabold mb-4" style={{ fontSize: 15, color: '#0f1a12' }}>
-                📱 Kontakt & Abholung
+                Kontakt & Abholung
               </h3>
 
               {/* Name */}
@@ -546,7 +552,7 @@ function CheckoutView({
               </p>
               {errors.orderType && <p className="text-xs mb-2" style={{ color: '#ef4444' }}>Bitte eine Option wählen</p>}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
-                {ORDER_TYPES.map(({ id, emoji, label, sub }) => {
+                {ORDER_TYPES.map(({ id, mark, label, sub }) => {
                   const selected = orderType === id
                   return (
                     <button
@@ -562,8 +568,8 @@ function CheckoutView({
                         transition: 'all 0.2s',
                       }}
                     >
-                      <div style={{ width: 44, height: 44, borderRadius: 12, background: selected ? 'rgba(255,255,255,0.5)' : '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
-                        {emoji}
+                      <div style={{ width: 44, height: 44, borderRadius: 12, background: selected ? 'rgba(255,255,255,0.5)' : '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, flexShrink: 0, fontWeight: 900, letterSpacing: '0.08em', color: selected ? '#15803d' : '#6b7c72' }}>
+                        {mark}
                       </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 14, fontWeight: 800, color: selected ? '#15803d' : '#0f1a12' }}>{label}</div>
@@ -602,13 +608,13 @@ function CheckoutView({
               {/* DINE-IN: table number */}
               {orderType === 'dine-in' && (
                 <div style={{ marginBottom: 14, padding: '14px 16px', background: '#f8fdf9', borderRadius: 14, border: '1px solid #d1fae5' }}>
-                  <p className="font-bold mb-2" style={{ fontSize: 13, color: '#0f1a12' }}>🪑 Tischnummer (optional)</p>
+                  <p className="font-bold mb-2" style={{ fontSize: 13, color: '#0f1a12' }}>Tischnummer (optional)</p>
                   <p style={{ fontSize: 12, color: '#6b7c72', marginBottom: 10 }}>Du kannst auch ohne Tischnummer bestellen — wir finden dich.</p>
                   <input type="text" value={tableNumber} onChange={e => setTableNumber(e.target.value)}
                     placeholder="z.B. Tisch 4 oder Ecktisch links"
                     style={{ width: '100%', padding: '12px 14px', background: '#fff', border: '1.5px solid #d1fae5', borderRadius: 10, fontSize: 15, color: '#0f1a12', fontFamily: 'inherit', boxSizing: 'border-box' }} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, padding: '8px 12px', background: '#f0fdf4', borderRadius: 8 }}>
-                    <span>⚡</span>
+                    <span aria-hidden>15</span>
                     <p style={{ fontSize: 12, color: '#6b7c72', margin: 0 }}>Deine Bowl wird sofort nach Eingang zubereitet.</p>
                   </div>
                 </div>
@@ -617,7 +623,7 @@ function CheckoutView({
               {/* DELIVERY: address + optional time */}
               {orderType === 'delivery' && (
                 <div style={{ marginBottom: 14, padding: '14px 16px', background: '#f8fdf9', borderRadius: 14, border: `1.5px solid ${errors.address ? '#ef4444' : '#d1fae5'}` }}>
-                  <p className="font-bold mb-2" style={{ fontSize: 13, color: '#0f1a12' }}>📍 Lieferadresse</p>
+                  <p className="font-bold mb-2" style={{ fontSize: 13, color: '#0f1a12' }}>Lieferadresse</p>
                   <input type="text" value={address} onChange={e => { setAddress(e.target.value); setErrors(er => ({ ...er, address: false })) }}
                     placeholder="z.B. Borneplatz 2, 48431 Rheine"
                     autoComplete="street-address"
@@ -671,7 +677,7 @@ function CheckoutView({
                 </div>
                 <div>
                   <div className="font-extrabold mb-0.5" style={{ fontSize: 14, color: '#15803d' }}>
-                    🥣 Stempel sammeln aktivieren
+                    Stempel sammeln aktivieren
                   </div>
                   <div style={{ fontSize: 12, color: '#15803d', lineHeight: 1.4 }}>
                     Nach 8 Bestellungen gibt&apos;s eine Gratis-Bowl.
@@ -686,7 +692,7 @@ function CheckoutView({
               style={{ background: '#fff', border: '1px solid #d1fae5' }}
             >
               <h3 className="font-extrabold mb-3" style={{ fontSize: 15, color: '#0f1a12' }}>
-                📝 Anmerkungen (optional)
+                Anmerkungen (optional)
               </h3>
               <textarea
                 value={orderNote}
@@ -713,7 +719,7 @@ function CheckoutView({
                 marginBottom: 12,
               }}
             >
-              Weiter zur Bestätigung →
+              Weiter zur Bestätigung
             </button>
           </>
         )}
@@ -730,7 +736,7 @@ function CheckoutView({
 
             {apiError && (
               <div className="rounded-xl px-4 py-3 mb-3 text-sm font-semibold" style={{ background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca' }}>
-                ⚠️ {apiError}
+                {apiError}
               </div>
             )}
 
@@ -739,11 +745,11 @@ function CheckoutView({
               style={{ background: '#fff', border: '1px solid #d1fae5' }}
             >
               <h3 className="font-extrabold mb-4" style={{ fontSize: 15, color: '#0f1a12' }}>
-                ✅ Bestellübersicht
+                Bestellübersicht
               </h3>
               {[
                 ['Name', customerName],
-                ['Bestellart', `${ORDER_TYPES.find(o => o.id === orderType)?.emoji ?? ''} ${ORDER_TYPES.find(o => o.id === orderType)?.label ?? '—'}`],
+                ['Bestellart', ORDER_TYPES.find(o => o.id === orderType)?.label ?? '—'],
                 ...(orderType === 'pickup' && pickupTime ? [['Abholzeit', `${pickupTime} Uhr`]] : []),
                 ...(orderType === 'dine-in' && tableNumber ? [['Tisch', tableNumber]] : []),
                 ...(orderType === 'delivery' ? [['Lieferung', address], ...(pickupTime ? [['Wunschzeit', `${pickupTime} Uhr`]] : [])] : []),
@@ -752,7 +758,7 @@ function CheckoutView({
                   `${((i.price + i.upsells.reduce((s, u) => s + u.price, 0)) * i.quantity).toFixed(2).replace('.', ',')} €`,
                 ]),
                 ['Gesamt', `${cartTotal(cart).toFixed(2).replace('.', ',')} €`],
-                ['Treuecard', loyaltyEnabled ? '✅ Stempel wird vergeben' : '❌ Nicht aktiviert'],
+                ['Treuecard', loyaltyEnabled ? 'Stempel wird vergeben' : 'Nicht aktiviert'],
               ].map(([k, v], idx) => (
                 <div
                   key={idx}
@@ -799,7 +805,7 @@ function CheckoutView({
                 marginBottom: 12,
               }}
             >
-              {isPending ? '⏳ Wird übermittelt…' : '🥣 Jetzt verbindlich bestellen'}
+              {isPending ? 'Wird übermittelt…' : 'Jetzt verbindlich bestellen'}
             </button>
             <button
               onClick={goStep1}
@@ -809,7 +815,7 @@ function CheckoutView({
                 background: 'transparent', color: '#3d5c47', cursor: 'pointer',
               }}
             >
-              ← Zurück bearbeiten
+              Zurück bearbeiten
             </button>
           </>
         )}
@@ -861,7 +867,7 @@ function SuccessView({
         style={{ background: '#f0fdf4', fontFamily: 'Inter, system-ui, sans-serif' }}
       >
         <div style={{ fontSize: 64, marginBottom: 20, animation: '_sEmoji 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
-          🎉
+          ✓
         </div>
         <h2
           className="font-black mb-2.5"
@@ -872,7 +878,7 @@ function SuccessView({
         <p style={{ fontSize: 15, color: '#6b7c72', lineHeight: 1.6, maxWidth: 300, marginBottom: 6 }}>
           {isDemo
             ? 'Das war eine Demo — keine echten Daten wurden gespeichert.'
-            : 'Du erhältst in Kürze eine Bestätigung. Deine Bowl wird vorbereitet! 🥣'}
+            : 'Du erhältst in Kürze eine Bestätigung. Deine Bowl wird vorbereitet.'}
         </p>
 
         {/* Detail Card */}
@@ -908,7 +914,7 @@ function SuccessView({
             }}
           >
             <p style={{ fontSize: 14, color: '#15803d', margin: 0 }}>
-              🥣 <strong>+1 Stempel</strong> wurde deiner Treuecard gutgeschrieben!
+              <strong>+1 Stempel</strong> wurde deiner Treuecard gutgeschrieben.
             </p>
           </div>
         )}
@@ -941,11 +947,12 @@ function SuccessView({
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function OrderClient({ tenant, menu, upsells, table, scanId }: Props) {
+export default function OrderClient({ tenant, menu, upsells, table, scanId, initialItemId }: Props) {
   const [cart, setCart] = useState<CartItem[]>([])
   const [upsellFor, setUpsellFor] = useState<MenuItem | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>(menu[0]?.id ?? '')
   const [accessToken, setAccessToken] = useState<string | null>(null)
+  const initialItemHandledRef = useRef(false)
   const [view, setView] = useState<View>('menu')
   const [successData, setSuccessData] = useState<{
     orderId: string; total: number; isDemo: boolean
@@ -998,11 +1005,30 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
     setUpsellFor(null)
   }, [])
 
-  const handleItemClick = (item: MenuItem) => {
+  const handleItemClick = useCallback((item: MenuItem) => {
     if (upsells.length > 0) setUpsellFor(item)
     else addToCart(item, [])
     if (navigator.vibrate) navigator.vibrate(8)
-  }
+  }, [addToCart, upsells.length])
+
+  useEffect(() => {
+    if (!initialItemId || initialItemHandledRef.current) return
+
+    const category = menu.find((cat) => cat.items.some((item) => item.id === initialItemId))
+    const item = category?.items.find((candidate) => candidate.id === initialItemId)
+    if (!item || !category) return
+
+    initialItemHandledRef.current = true
+    setActiveCategory(category.id)
+
+    window.setTimeout(() => {
+      document.getElementById(`menu-item-${item.id}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+      window.setTimeout(() => handleItemClick(item), 320)
+    }, 220)
+  }, [handleItemClick, initialItemId, menu])
 
   const removeCartItem = (cartKey: string) =>
     setCart((prev) => prev.filter((c) => c.cartKey !== cartKey))
@@ -1064,7 +1090,7 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
       {/* Error Banner */}
       {orderError && (
         <div className="text-center text-sm py-2 font-semibold text-white" style={{ background: '#ef4444' }}>
-          ⚠️ {orderError}
+          {orderError}
         </div>
       )}
 
@@ -1168,6 +1194,7 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
                   return (
                     <div
                       key={item.id}
+                      id={`menu-item-${item.id}`}
                       className="rounded-2xl shadow-sm transition-all overflow-hidden"
                       style={{
                         background: '#fff',
@@ -1216,7 +1243,7 @@ export default function OrderClient({ tenant, menu, upsells, table, scanId }: Pr
                                   background: '#fef3c7', color: '#92400e',
                                   padding: '1px 6px', borderRadius: 4,
                                 }}>
-                                  ⚠️ {a.name}
+                                  {a.name}
                                 </span>
                               ))}
                             </div>

@@ -10,6 +10,15 @@ type ItemIngredient = { id: string; item_id: string; ingredient_id: string }
 
 type EditingState = { type: 'category' | 'item' | 'upsell'; id: string | null; data: Record<string, any> } | null
 type DeletingState = { type: 'category' | 'item' | 'upsell' | 'ingredient'; id: string } | null
+type UploadTarget = { type: 'item' | 'upsell'; id: string }
+type CropState = {
+  target: UploadTarget
+  file: File
+  previewUrl: string
+  zoom: number
+  x: number
+  y: number
+}
 
 // Allergen-Gruppen mit Emoji
 const ALLERGEN_GROUPS = [
@@ -57,7 +66,9 @@ export function SpeisekarteView({ slug }: Props) {
   // Foto-Upload State
   const [uploadingFor, setUploadingFor] = useState<string | null>(null) // item-id oder 'upsell-<id>'
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploadTarget, setUploadTarget] = useState<{ type: 'item' | 'upsell'; id: string } | null>(null)
+  const cropCanvasRef = useRef<HTMLCanvasElement>(null)
+  const [uploadTarget, setUploadTarget] = useState<UploadTarget | null>(null)
+  const [cropState, setCropState] = useState<CropState | null>(null)
 
   // Zutaten-Zuordnung Modal
   const [assigningItem, setAssigningItem] = useState<Item | null>(null)
@@ -171,12 +182,101 @@ export function SpeisekarteView({ slug }: Props) {
     if (!file || !uploadTarget) return
     e.target.value = ''
 
-    const key = uploadTarget.type === 'upsell' ? `upsell-${uploadTarget.id}` : uploadTarget.id
+    const previewUrl = URL.createObjectURL(file)
+    setCropState({
+      target: uploadTarget,
+      file,
+      previewUrl,
+      zoom: 1,
+      x: 50,
+      y: 50,
+    })
+    setUploadTarget(null)
+  }
+
+  function closeCropper() {
+    if (cropState) URL.revokeObjectURL(cropState.previewUrl)
+    setCropState(null)
+    setUploadTarget(null)
+  }
+
+  function loadImage(src: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = () => resolve(img)
+      img.onerror = reject
+      img.src = src
+    })
+  }
+
+  function getCropRect(img: HTMLImageElement, crop: Pick<CropState, 'zoom' | 'x' | 'y'>) {
+    const aspect = 4 / 3
+    let cropW = img.naturalWidth / crop.zoom
+    let cropH = cropW / aspect
+
+    if (cropH > img.naturalHeight / crop.zoom) {
+      cropH = img.naturalHeight / crop.zoom
+      cropW = cropH * aspect
+    }
+
+    const centerX = img.naturalWidth * (crop.x / 100)
+    const centerY = img.naturalHeight * (crop.y / 100)
+    const sx = Math.max(0, Math.min(img.naturalWidth - cropW, centerX - cropW / 2))
+    const sy = Math.max(0, Math.min(img.naturalHeight - cropH, centerY - cropH / 2))
+
+    return { sx, sy, cropW, cropH }
+  }
+
+  useEffect(() => {
+    if (!cropState || !cropCanvasRef.current) return
+
+    let cancelled = false
+    void loadImage(cropState.previewUrl)
+      .then((img) => {
+        if (cancelled || !cropCanvasRef.current) return
+        const canvas = cropCanvasRef.current
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
+
+        const { sx, sy, cropW, cropH } = getCropRect(img, cropState)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.drawImage(img, sx, sy, cropW, cropH, 0, 0, canvas.width, canvas.height)
+      })
+      .catch(() => {
+        if (!cancelled) setError('Bildvorschau konnte nicht geladen werden.')
+      })
+
+    return () => { cancelled = true }
+  }, [cropState])
+
+  async function createCroppedFile(crop: CropState): Promise<File> {
+    const img = await loadImage(crop.previewUrl)
+    const canvas = document.createElement('canvas')
+    canvas.width = 1200
+    canvas.height = 900
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Bild konnte nicht vorbereitet werden.')
+
+    const { sx, sy, cropW, cropH } = getCropRect(img, crop)
+    ctx.drawImage(img, sx, sy, cropW, cropH, 0, 0, canvas.width, canvas.height)
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/webp', 0.9))
+    if (!blob) throw new Error('Bildzuschnitt fehlgeschlagen.')
+
+    const baseName = crop.file.name.replace(/\.[^.]+$/, '')
+    return new File([blob], `${baseName}-crop.webp`, { type: 'image/webp' })
+  }
+
+  async function confirmCroppedUpload() {
+    if (!cropState) return
+
+    const key = cropState.target.type === 'upsell' ? `upsell-${cropState.target.id}` : cropState.target.id
     setUploadingFor(key)
 
     try {
+      const croppedFile = await createCroppedFile(cropState)
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', croppedFile)
 
       const uploadRes = await fetch(`/api/${slug}/admin/upload`, { method: 'POST', body: formData })
       const uploadData = await uploadRes.json() as { url?: string; error?: string }
@@ -186,8 +286,8 @@ export function SpeisekarteView({ slug }: Props) {
       const menuRes = await fetch(`/api/${slug}/admin/menu`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: uploadTarget.type,
-          id: uploadTarget.id,
+          type: cropState.target.type,
+          id: cropState.target.id,
           data: { image_url: uploadData.url },
         }),
       })
@@ -195,11 +295,11 @@ export function SpeisekarteView({ slug }: Props) {
 
       await fetchMenu()
       showSuccess('Foto hochgeladen ✓')
+      closeCropper()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload-Fehler')
     } finally {
       setUploadingFor(null)
-      setUploadTarget(null)
     }
   }
 
@@ -283,6 +383,103 @@ export function SpeisekarteView({ slug }: Props) {
         style={{ display: 'none' }}
         onChange={(e) => void handleFileChange(e)}
       />
+
+      {cropState && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 80,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 18,
+            background: 'rgba(0,0,0,0.52)',
+          }}
+          onClick={closeCropper}
+        >
+          <div
+            className="betrieb-dash-card"
+            style={{ width: 'min(94vw, 760px)', maxHeight: '92vh', overflow: 'auto' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 16 }}>
+              <div>
+                <h3 style={{ margin: 0, fontFamily: 'var(--font-head)', fontSize: '1rem', fontWeight: 900 }}>
+                  Foto zuschneiden
+                </h3>
+                <p style={{ margin: '5px 0 0', fontSize: 12, color: 'var(--text-3)' }}>
+                  Der Ausschnitt wird als 4:3-Bild gespeichert und passt dadurch sauber in Speisekarte und Landingpage.
+                </p>
+              </div>
+              <button type="button" onClick={closeCropper}
+                style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--text)' }}>
+                ✕
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 280px', gap: 18, alignItems: 'start' }}>
+              <div>
+                <div style={{ position: 'relative', aspectRatio: '4 / 3', borderRadius: 18, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--surface-2)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={cropState.previewUrl}
+                    alt=""
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: `${cropState.x}% ${cropState.y}%`,
+                      transform: `scale(${cropState.zoom})`,
+                      transformOrigin: `${cropState.x}% ${cropState.y}%`,
+                      display: 'block',
+                    }}
+                  />
+                  <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 0 2px rgba(255,255,255,0.72), inset 0 0 0 9999px rgba(0,0,0,0.10)', pointerEvents: 'none' }} />
+                </div>
+
+                <div style={{ display: 'grid', gap: 12, marginTop: 14 }}>
+                  <label style={{ display: 'grid', gap: 6, fontSize: 12, fontWeight: 700 }}>
+                    Zoom
+                    <input type="range" min="1" max="3" step="0.05" value={cropState.zoom}
+                      onChange={e => setCropState({ ...cropState, zoom: Number(e.target.value) })} />
+                  </label>
+                  <label style={{ display: 'grid', gap: 6, fontSize: 12, fontWeight: 700 }}>
+                    Horizontaler Fokus
+                    <input type="range" min="0" max="100" step="1" value={cropState.x}
+                      onChange={e => setCropState({ ...cropState, x: Number(e.target.value) })} />
+                  </label>
+                  <label style={{ display: 'grid', gap: 6, fontSize: 12, fontWeight: 700 }}>
+                    Vertikaler Fokus
+                    <input type="range" min="0" max="100" step="1" value={cropState.y}
+                      onChange={e => setCropState({ ...cropState, y: Number(e.target.value) })} />
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 800, color: 'var(--text-2)' }}>Live-Vorschau</p>
+                <canvas
+                  ref={cropCanvasRef}
+                  width={320}
+                  height={240}
+                  style={{ width: '100%', aspectRatio: '4 / 3', borderRadius: 16, border: '1px solid var(--border)', background: 'var(--surface-2)', display: 'block' }}
+                />
+                <p style={{ margin: '10px 0 0', fontSize: 11, color: 'var(--text-3)', lineHeight: 1.5 }}>
+                  Gespeichert wird eine optimierte WebP-Datei. Das ist Vercel-freundlich und hält die Seite schnell.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 18, flexWrap: 'wrap' }}>
+              <button type="button" onClick={closeCropper} style={btnSecondary}>Abbrechen</button>
+              <button type="button" onClick={() => void confirmCroppedUpload()} disabled={uploadingFor !== null} style={{ ...btnPrimary, minWidth: 150 }}>
+                {uploadingFor ? 'Lade hoch…' : 'Ausschnitt speichern'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* KPI-Bar */}
       <div className="betrieb-filter-bar" style={{ marginBottom: 20 }}>
@@ -407,6 +604,11 @@ export function SpeisekarteView({ slug }: Props) {
                         {up.image_url ? (
                           <div style={{ position: 'relative', flexShrink: 0 }}>
                             <img src={up.image_url} alt={up.label} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
+                            <button type="button" onClick={() => triggerUpload('upsell', up.id)}
+                              title="Foto ersetzen oder neu zuschneiden"
+                              style={{ position: 'absolute', bottom: -6, left: -6, width: 18, height: 18, borderRadius: '50%', border: 'none', background: 'var(--accent)', color: '#fff', cursor: 'pointer', fontSize: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              ↺
+                            </button>
                             <button type="button" onClick={() => void removePhoto('upsell', up.id, up.image_url!)}
                               style={{ position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%', border: 'none', background: '#ef4444', color: '#fff', cursor: 'pointer', fontSize: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               ✕
@@ -523,6 +725,11 @@ export function SpeisekarteView({ slug }: Props) {
                                   {item.image_url ? (
                                     <div style={{ position: 'relative' }}>
                                       <img src={item.image_url} alt={item.name} style={{ width: 52, height: 52, borderRadius: 10, objectFit: 'cover', border: '1px solid var(--border)', display: 'block' }} />
+                                      <button type="button" onClick={() => triggerUpload('item', item.id)}
+                                        title="Foto ersetzen oder neu zuschneiden"
+                                        style={{ position: 'absolute', bottom: -6, left: -6, width: 18, height: 18, borderRadius: '50%', border: 'none', background: 'var(--accent)', color: '#fff', cursor: 'pointer', fontSize: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        ↺
+                                      </button>
                                       <button type="button" onClick={() => void removePhoto('item', item.id, item.image_url!)}
                                         style={{ position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%', border: 'none', background: '#ef4444', color: '#fff', cursor: 'pointer', fontSize: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         ✕

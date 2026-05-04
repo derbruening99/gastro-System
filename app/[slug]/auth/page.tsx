@@ -112,12 +112,18 @@ export default function AuthPage({ params }: Props) {
   }
 
   return (
-    <div className="odis-landing odis-customer-site has-glass-nav" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div className="odis-landing odis-customer-site has-glass-nav" style={{
+      minHeight: '100dvh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      background: 'radial-gradient(50% 58% at 82% 0%, rgba(255,167,38,0.07), transparent 70%), radial-gradient(42% 58% at 8% 92%, rgba(76,175,80,0.07), transparent 72%), linear-gradient(180deg, #0a0d0a 0%, #0e1410 46%, #0a0d0a 100%)',
+    }}>
       <SiteNav slug={slug} restaurantName={tenant.name} isLoggedIn={false} />
-      <div style={{ maxWidth: 420, margin: '0 auto', padding: '132px 20px 32px', width: '100%' }}>
+      <div style={{ maxWidth: 440, margin: '0 auto', padding: '132px 20px 48px', width: '100%' }}>
 
         {/* Zurück */}
-        <Link href={`/${slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'var(--text-2)', fontSize: 14, fontWeight: 600, marginBottom: 28 }}>
+        <Link href={`/${slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'rgba(255,255,255,0.58)', fontSize: 14, fontWeight: 600, marginBottom: 28 }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
@@ -126,19 +132,40 @@ export default function AuthPage({ params }: Props) {
 
         {/* Header */}
         <div style={{ marginBottom: 28 }}>
-          <div style={{ display: 'inline-flex', background: 'linear-gradient(135deg,#22c55e,#16a34a)', color: '#fff', fontSize: 10, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', padding: '4px 12px', borderRadius: 99, marginBottom: 14 }}>
+          <div style={{ display: 'inline-flex', background: 'rgba(255,167,38,0.12)', color: 'rgba(255,167,38,0.96)', border: '1px solid rgba(255,167,38,0.22)', fontSize: 10, fontWeight: 800, letterSpacing: '1.5px', textTransform: 'uppercase', padding: '4px 12px', borderRadius: 99, marginBottom: 14 }}>
             Mein Bereich
           </div>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 26, fontWeight: 900, color: 'var(--dark)', lineHeight: 1.2, marginBottom: 8 }}>
-            Stempel sammeln &<br /><span style={{ color: '#16a34a' }}>Gratis-Bowl sichern</span>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 30, fontWeight: 900, color: '#fff', lineHeight: 1.08, letterSpacing: '-0.02em', marginBottom: 10, textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>
+            Dein Bowl-Konto,<br /><span style={{ color: 'rgba(255,244,207,0.96)' }}>ohne Umwege.</span>
           </h1>
-          <p style={{ color: 'var(--text-2)', fontSize: 14, lineHeight: 1.6 }}>
-            8 Bestellungen = 1 Bowl gratis. Deine Nummer reicht.
+          <p style={{ color: 'rgba(255,255,255,0.64)', fontSize: 14, lineHeight: 1.6 }}>
+            Schnell anmelden, Stempel sammeln und deine Bestellungen im Blick behalten.
           </p>
         </div>
 
+        <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: 22,
+          padding: 18,
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.032))',
+          border: '1px solid rgba(255,255,255,0.10)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 14px 34px rgba(0,0,0,0.30)',
+          backdropFilter: 'blur(12px) saturate(1.12)',
+          WebkitBackdropFilter: 'blur(12px) saturate(1.12)',
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: -2,
+            left: 24,
+            right: 24,
+            height: 2,
+            background: 'linear-gradient(90deg, transparent, rgba(255,167,38,0.82), transparent)',
+            opacity: 0.72,
+          }} />
+
         {/* Tabs */}
-        <div style={{ display: 'flex', background: 'var(--border-soft)', borderRadius: 12, padding: 4, marginBottom: 24, gap: 4 }}>
+        <div style={{ display: 'flex', background: 'rgba(0,0,0,0.16)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16, padding: 4, marginBottom: 18, gap: 4, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
           {(['login', 'register'] as Tab[]).map((t) => (
             <button
               key={t}
@@ -147,9 +174,9 @@ export default function AuthPage({ params }: Props) {
               style={{
                 flex: 1, padding: '10px 0', borderRadius: 9, border: 'none', cursor: 'pointer',
                 fontFamily: 'inherit', fontSize: 14, fontWeight: 700, transition: 'all 0.18s',
-                background: tab === t ? '#fff' : 'transparent',
-                color: tab === t ? 'var(--dark)' : 'var(--text-3)',
-                boxShadow: tab === t ? '0 1px 6px rgba(0,0,0,0.10)' : 'none',
+                background: tab === t ? 'rgba(255,167,38,0.13)' : 'transparent',
+                color: tab === t ? 'rgba(255,244,207,0.96)' : 'rgba(255,255,255,0.56)',
+                boxShadow: tab === t ? 'inset 0 0 0 1px rgba(255,167,38,0.22)' : 'none',
               }}
             >
               {t === 'login' ? 'Anmelden' : 'Registrieren'}
@@ -169,7 +196,7 @@ export default function AuthPage({ params }: Props) {
               autoComplete="tel"
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = '#22c55e')}
-              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+              onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.10)')}
             />
             <input
               type="password"
@@ -180,7 +207,7 @@ export default function AuthPage({ params }: Props) {
               autoComplete="current-password"
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = '#22c55e')}
-              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+              onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.10)')}
             />
 
             {error && (
@@ -190,7 +217,7 @@ export default function AuthPage({ params }: Props) {
             )}
 
             <button type="submit" disabled={isPending} className="vip-cta-btn" style={btnStyle(isPending)}>
-              {isPending ? 'Anmelden…' : 'Anmelden →'}
+              {isPending ? 'Anmelden…' : 'Anmelden'}
             </button>
 
             <p style={{ textAlign: 'center', color: 'var(--text-3)', fontSize: 13, marginTop: 4 }}>
@@ -214,7 +241,7 @@ export default function AuthPage({ params }: Props) {
               autoComplete="tel"
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = '#22c55e')}
-              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+              onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.10)')}
             />
             <input
               type="text"
@@ -224,7 +251,7 @@ export default function AuthPage({ params }: Props) {
               autoComplete="name"
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = '#22c55e')}
-              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+              onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.10)')}
             />
             <input
               type="password"
@@ -235,7 +262,7 @@ export default function AuthPage({ params }: Props) {
               autoComplete="new-password"
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = '#22c55e')}
-              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+              onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.10)')}
             />
 
             {error && (
@@ -245,7 +272,7 @@ export default function AuthPage({ params }: Props) {
             )}
 
             <button type="submit" disabled={isPending} className="vip-cta-btn" style={btnStyle(isPending)}>
-              {isPending ? 'Konto anlegen…' : '✨ Konto anlegen & anmelden'}
+              {isPending ? 'Konto anlegen…' : 'Konto anlegen & anmelden'}
             </button>
 
             <p style={{ textAlign: 'center', color: 'var(--text-3)', fontSize: 13, marginTop: 4 }}>
@@ -256,24 +283,11 @@ export default function AuthPage({ params }: Props) {
             </p>
           </form>
         )}
+        </div>
 
-        {/* Benefits */}
-        <ul className="vip-benefits" style={{ marginTop: 28 }}>
-          {[
-            '8 Bestellungen = 1 Bowl gratis',
-            'Per WhatsApp bestellen — schnell & direkt',
-            'Bestellhistorie jederzeit einsehen',
-          ].map((b) => (
-            <li key={b} className="vip-benefit-item">
-              <span className="vip-benefit-check">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </span>
-              {b}
-            </li>
-          ))}
-        </ul>
+        <p style={{ marginTop: 22, textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,0.42)', lineHeight: 1.5 }}>
+          8 Bestellungen = 1 Gratis-Bowl. Deine Nummer reicht.
+        </p>
       </div>
     </div>
   )
@@ -281,9 +295,9 @@ export default function AuthPage({ params }: Props) {
 
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '14px 16px', fontSize: 16,
-  borderRadius: 14, border: '1.5px solid var(--border)',
-  background: 'var(--surface)', color: 'var(--dark)',
-  outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.18s',
+  borderRadius: 14, border: '1px solid rgba(255,255,255,0.10)',
+  background: 'rgba(255,255,255,0.055)', color: '#fff',
+  outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.18s, background 0.18s',
 }
 
 const linkBtnStyle: React.CSSProperties = {

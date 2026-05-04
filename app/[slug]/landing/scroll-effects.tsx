@@ -25,7 +25,9 @@ export function ScrollEffects() {
     // FAB Sichtbarkeit
     const fabWrap = root.querySelector('#fabWrap')
     const hero = root.querySelector('.hero')
-    const orderSec = root.querySelector('.order-section')
+    const fabHideSections = root.querySelectorAll(
+      '.menu-showcase, .order-section, .site-footer',
+    )
 
     const heroObs = new IntersectionObserver(
       (entries) => {
@@ -40,18 +42,25 @@ export function ScrollEffects() {
     if (hero) heroObs.observe(hero)
 
     let hideObs: IntersectionObserver | null = null
-    if (orderSec && fabWrap) {
+    const hiddenSections = new Set<Element>()
+    if (fabHideSections.length > 0 && fabWrap) {
       hideObs = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
             if (!fabWrap) return
-            if (e.isIntersecting) fabWrap.classList.add('fab-dim')
-            else if (fabWrap.classList.contains('visible')) fabWrap.classList.remove('fab-dim')
+            if (e.isIntersecting) hiddenSections.add(e.target)
+            else hiddenSections.delete(e.target)
+
+            if (hiddenSections.size > 0) {
+              fabWrap.classList.add('fab-dim')
+            } else if (fabWrap.classList.contains('visible')) {
+              fabWrap.classList.remove('fab-dim')
+            }
           })
         },
-        { threshold: 0.2 },
+        { threshold: 0.12 },
       )
-      hideObs.observe(orderSec)
+      fabHideSections.forEach((section) => hideObs?.observe(section))
     }
 
     // FAB Emoji-Rotation beim Scrollen

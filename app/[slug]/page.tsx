@@ -1,11 +1,13 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getTenant } from '@/lib/tenant'
 import { getMenuByRestaurant } from '@/lib/menu'
 import { getSession } from '@/lib/auth'
 import { HeroBackdrop } from './landing/hero-backdrop'
 import { HeroLogo } from './landing/hero-logo'
+import { HeroTransition } from './landing/hero-transition'
 import { MenuSection } from './landing/menu-section'
 import { ScrollEffects } from './landing/scroll-effects'
 import { SiteNav } from './landing/site-nav'
@@ -28,10 +30,10 @@ export async function generateMetadata({
 }
 
 const HOW_STEPS = [
-  { emoji: '📱', label: 'Menü aufrufen', sub: 'QR-Code scannen oder Link öffnen' },
-  { emoji: '🥣', label: 'Gericht wählen', sub: 'Aus dem Menü oder individuell' },
-  { emoji: '✅', label: 'Bestellung absenden', sub: 'In unter einer Minute' },
-  { emoji: '🎉', label: 'Abholen & genießen', sub: 'Frisch zubereitet, direkt für dich' },
+  { mark: 'CITY', label: 'Standort wählen', sub: 'Du startest im Menü deines Standorts und bestellst direkt dorthin.' },
+  { mark: 'BOWL', label: 'Bowl bauen', sub: 'Basis, Protein, Toppings und Sauce sauber kombinieren.' },
+  { mark: 'SEND', label: 'Bestellung senden', sub: 'Deine Auswahl geht ohne Umweg an das Odi’s-Team.' },
+  { mark: 'PICK', label: 'Frisch abholen', sub: 'Vorbereitet für deine Stadt, sobald die Bestellung eingeht.' },
 ] as const
 
 // SVGs für Footer-Sociallinks
@@ -40,12 +42,6 @@ const InstagramIcon = () => (
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-  </svg>
-)
-
-const TikTokIcon = () => (
-  <svg width="16" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.85a8.19 8.19 0 0 0 4.79 1.52V6.89a4.85 4.85 0 0 1-1.02-.2z" />
   </svg>
 )
 
@@ -77,6 +73,9 @@ export default async function TenantLandingPage({
   const kustomizerHref = `/${slug}/kustomizer`
   const logoUrl = tenant.logo_url ?? '/Bowl_Logo.png'
   const userInitial = user?.email?.charAt(0).toUpperCase()
+  const displayAddress = slug === 'odis-bowl'
+    ? 'Borneplatz 2, 48431 Rheine'
+    : tenant.address
 
   const phoneHref = tenant.phone
     ? `tel:${tenant.phone.replace(/\D/g, '')}`
@@ -84,6 +83,18 @@ export default async function TenantLandingPage({
   const waHref = tenant.phone
     ? `https://wa.me/${tenant.phone.replace(/\D/g, '')}`
     : null
+  const instagramHref = slug === 'odis-bowl'
+    ? 'https://www.instagram.com/odis.bowl/'
+    : null
+  const legalLinks = slug === 'odis-bowl'
+    ? {
+        impressum: 'https://odis-bowl.de/impressum',
+        datenschutz: 'https://odis-bowl.de/datenschutz',
+      }
+    : {
+        impressum: null,
+        datenschutz: null,
+      }
 
   return (
     // odis-customer-site aktiviert die Glas-Nav CSS-Klassen
@@ -117,7 +128,7 @@ export default async function TenantLandingPage({
               href={kustomizerHref}
               style={{ backgroundColor: accent, borderColor: accent }}
             >
-              🥣 Bowl konfigurieren
+              Bowl konfigurieren
             </Link>
             <Link
               className="btn-cta btn-cta-ghost"
@@ -126,36 +137,16 @@ export default async function TenantLandingPage({
               Direkt bestellen
             </Link>
           </div>
-          {waHref && (
-            <a href={waHref} className="hero-whatsapp" target="_blank" rel="noreferrer noopener">
-              Jetzt via WhatsApp bestellen
-            </a>
-          )}
-          {/* Adresse + Telefon — einmalig, unter dem WhatsApp-CTA */}
-          {(tenant.address || tenant.phone) && (
-            <div className="hero-meta">
-              {tenant.address && (
-                <span className="hero-meta-item">
-                  <span className="hero-meta-icon" aria-hidden>📍</span>
-                  <span>
-                    <strong>Standort</strong>
-                    {tenant.address}
-                  </span>
-                </span>
-              )}
-              {tenant.phone && phoneHref && (
-                <a className="hero-meta-item hero-meta-link" href={phoneHref}>
-                  <span className="hero-meta-icon" aria-hidden>📞</span>
-                  <span>
-                    <strong>Telefon</strong>
-                    {tenant.phone}
-                  </span>
-                </a>
-              )}
-            </div>
-          )}
         </div>
       </section>
+
+      <HeroTransition
+        logoUrl={logoUrl}
+        restaurantName={tenant.name}
+        address={displayAddress}
+        phone={tenant.phone}
+        phoneHref={phoneHref}
+      />
 
       {/* Demo Banner */}
       {tenant.is_demo && (
@@ -171,9 +162,9 @@ export default async function TenantLandingPage({
       {menu.length > 0 && (
         <section className="menu-showcase">
           <div className="sec-head reveal">
-            <div className="ey">Unsere Bowls</div>
-            <h2>Wähle <em>dein</em> Gericht</h2>
-            <p>Täglich frisch zubereitet — handgemacht in Rheine</p>
+            <div className="ey">Odi’s Menü</div>
+            <h2>Signature Bowls. Direkt bestellbar.</h2>
+            <p>Wähle eine fertige Bowl oder stelle dir deine Kombination frisch zusammen.</p>
           </div>
 
           <div className="products" id="bestellen">
@@ -183,10 +174,10 @@ export default async function TenantLandingPage({
               href={kustomizerHref}
               style={{ '--card-accent': accent } as React.CSSProperties}
             >
-              <div className="konfig-icon" aria-hidden>✨</div>
+              <div className="konfig-icon" aria-hidden>Mix</div>
               <div className="konfig-text">
-                <h4>Individuell konfigurieren</h4>
-                <p>Basis · Zutaten · Sauce · Extras</p>
+                <h4>Bowl nach deinem Geschmack</h4>
+                <p>Basis · Protein · Toppings · Sauce · Extras</p>
               </div>
               <div className="konfig-arrow" aria-hidden>›</div>
             </Link>
@@ -200,97 +191,68 @@ export default async function TenantLandingPage({
       <section className="flow-steps" aria-labelledby="flow-title">
         <div className="flow-steps-bg" aria-hidden />
         <div className="flow-steps-inner">
-          <div className="sec-head reveal" style={{ marginBottom: 18 }}>
-            <div className="ey">In 60 Sekunden zur Bowl</div>
-            <h2 id="flow-title">So <em>einfach</em> geht's</h2>
-            <p>Kein Login, keine App, keine Umwege.</p>
-          </div>
+          <div className="flow-layout">
+            <div className="flow-story">
+              <span className="flow-story-kicker">Abholung</span>
+              <h2 id="flow-title">Erst Standort. Dann Bowl.</h2>
+              <p>
+                Odi’s bleibt schnell, weil die Bestellung dort ankommt, wo sie
+                vorbereitet wird: am passenden Standort.
+              </p>
+              <div className="flow-story-meta">
+                <span>Kein Umweg</span>
+                <strong>Bestellen, abholen, weiter.</strong>
+              </div>
+            </div>
 
-          <ol className="flow-steps-list">
-            {HOW_STEPS.map(({ emoji, label, sub }, index) => (
-              <li key={label} className="flow-step reveal" style={{ animationDelay: `${0.05 * index}s` }}>
-                <div className="flow-step-num" aria-hidden>0{index + 1}</div>
-                <div className="flow-step-icon" aria-hidden>{emoji}</div>
-                <div className="flow-step-body">
-                  <h3 className="flow-step-label">{label}</h3>
-                  <p className="flow-step-sub">{sub}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+            <ol className="flow-steps-list">
+              {HOW_STEPS.map(({ mark, label, sub }, index) => (
+                <li key={label} className="flow-step" style={{ animationDelay: `${0.05 * index}s` }}>
+                  <div className="flow-step-num" aria-hidden>0{index + 1}</div>
+                  <div className="flow-step-body">
+                    <h3 className="flow-step-label">{label}</h3>
+                    <p className="flow-step-sub">{sub}</p>
+                  </div>
+                  <div className="flow-step-mark" aria-hidden>{mark}</div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
-      {/* ── Social Proof ──────────────────────────────────────────── */}
-      <div className="social-proof-section reveal">
-        <div className="sp-stars" aria-label="5 von 5 Sternen">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <svg
-              key={i}
-              className="sp-star"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-          ))}
-        </div>
-        <p className="sp-score">
-          4.9 <span className="sp-score-max">/ 5</span>
-        </p>
-        <p className="sp-label">Top bewertet von unseren Gästen</p>
-        <div className="sp-trust-row">
-          <span className="sp-trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            Keine Gebühren
-          </span>
-          <span className="sp-trust-sep" aria-hidden>·</span>
-          <span className="sp-trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            Täglich frisch
-          </span>
-          <span className="sp-trust-sep" aria-hidden>·</span>
-          <span className="sp-trust-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            Direktbestellung
-          </span>
-        </div>
-      </div>
-
       {/* ── Order CTA ─────────────────────────────────────────────── */}
-      <div className="order-section reveal">
+      <div className="order-section">
+        <div className="order-copy">
+          <span>Bestellen</span>
+          <h2>Deine Bowl wartet nicht lange.</h2>
+          <p>Konfigurator öffnen, Speisekarte wählen oder direkt per WhatsApp schreiben.</p>
+        </div>
+
         {/* Primär: Groß & prominent — direkt ins Menü */}
         <Link className="btn-cta-lg" href={kustomizerHref}>
-          <span aria-hidden>🥣</span>
+          <span aria-hidden>→</span>
           <span>
-            Jetzt bestellen
-            <small>Individuell konfigurieren — Schritt für Schritt</small>
+            Konfigurator öffnen
+            <small>Deine Bowl sauber zusammenstellen</small>
           </span>
         </Link>
 
-        <div className="order-divider"><span>oder direkt bestellen</span></div>
+        <div className="order-divider"><span>Direktauswahl</span></div>
 
         {/* Sekundär: Direkt aus der Speisekarte */}
         <Link className="btn-direct" href={orderHref}>
-          <span aria-hidden>📲</span>
+          <span aria-hidden>→</span>
           <span>
             Aus der Speisekarte
-            <small>Direkt — ohne Umwege — ohne App</small>
+            <small>Fertige Bowl wählen und absenden</small>
           </span>
         </Link>
 
         {/* WhatsApp — nur wenn vorhanden */}
         {waHref && (
           <>
-            <div className="order-divider"><span>auch möglich</span></div>
+            <div className="order-divider"><span>WhatsApp</span></div>
             <Link className="btn-wa" href={waHref} target="_blank" rel="noopener noreferrer">
               <WhatsAppIcon />
               Direkt via WhatsApp bestellen
@@ -302,67 +264,90 @@ export default async function TenantLandingPage({
       {/* ── Footer ────────────────────────────────────────────────── */}
       <footer className="site-footer">
         <div className="footer-inner">
-          {/* Brand */}
-          <div className="footer-brand">
-            <span className="footer-logo-text">{tenant.name}</span>
-            <span className="footer-tagline">Frisch. Direkt. Für dich.</span>
-          </div>
+          <div className="footer-signature" aria-label={`${tenant.name} — Frisch. Gesund. Lecker.`}>
+            <div className="footer-signature-head">
+              <span className="footer-signature-mark">
+                <Image
+                  src={logoUrl}
+                  alt=""
+                  width={56}
+                  height={56}
+                  sizes="56px"
+                />
+              </span>
+              <span className="footer-signature-copy">
+                <strong>{tenant.name}</strong>
+                <span>Frisch. Gesund. Lecker.</span>
+              </span>
+            </div>
 
-          {/* Social Links */}
-          <div className="footer-social">
-            <a
-              className="footer-social-link"
-              href="#"
-              aria-label="Instagram"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <InstagramIcon />
-            </a>
-            <a
-              className="footer-social-link"
-              href="#"
-              aria-label="TikTok"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <TikTokIcon />
-            </a>
-            {waHref && (
-              <a
-                className="footer-social-link"
-                href={waHref}
-                aria-label="WhatsApp"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <WhatsAppIcon />
-              </a>
-            )}
-          </div>
+            <div className="footer-social">
+              {instagramHref && (
+                <a
+                  className="footer-social-link"
+                  href={instagramHref}
+                  aria-label="Instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <InstagramIcon />
+                </a>
+              )}
+              {waHref && (
+                <a
+                  className="footer-social-link"
+                  href={waHref}
+                  aria-label="WhatsApp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <WhatsAppIcon />
+                </a>
+              )}
+            </div>
 
-          {/* Legal Links */}
-          <div className="footer-links">
-            <a href={`/${slug}/impressum`}>Impressum</a>
-            <a href={`/${slug}/datenschutz`}>Datenschutz</a>
-            {tenant.address && <a href="#bestellen">Unser Laden</a>}
-          </div>
+            <div className="footer-links">
+              {legalLinks.impressum && (
+                <a href={legalLinks.impressum} target="_blank" rel="noopener noreferrer">
+                  Impressum
+                </a>
+              )}
+              {legalLinks.datenschutz && (
+                <a href={legalLinks.datenschutz} target="_blank" rel="noopener noreferrer">
+                  Datenschutz
+                </a>
+              )}
+              <a href={`/${slug}/unser-laden`}>Standorte</a>
+            </div>
 
-          {/* Copyright */}
-          <p className="footer-copy">
-            © {new Date().getFullYear()} {tenant.name}
-            {tenant.address ? ` · ${tenant.address}` : ''}
-          </p>
+            <p className="footer-copy">
+              {waHref ? (
+                <>
+                  Bestellungen sind direkt über{' '}
+                  <a
+                    href={waHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    WhatsApp
+                  </a>{' '}
+                  möglich.
+                </>
+              ) : (
+                'Bestellungen sind direkt über WhatsApp möglich.'
+              )}
+            </p>
+          </div>
         </div>
       </footer>
 
       {/* ── FAB ───────────────────────────────────────────────────── */}
       <div className="fab-wrap" id="fabWrap">
         <div className="fab-label">
-          <span className="fab-label-wrap-emoji" aria-hidden>🌯</span>
+          <span className="fab-label-wrap-emoji" aria-hidden>→</span>
           <div>
             <span className="fab-label-text">Jetzt bestellen</span>
-            <span className="fab-label-sub">Direkt zum Menü →</span>
+            <span className="fab-label-sub">Direkt zum Menü</span>
           </div>
         </div>
         <Link
@@ -370,7 +355,7 @@ export default async function TenantLandingPage({
           href={kustomizerHref}
           aria-label="Jetzt bestellen"
         >
-          <span className="fab-emoji" id="fabEmoji">🥣</span>
+          <span className="fab-emoji" id="fabEmoji">BOWL</span>
         </Link>
       </div>
     </div>

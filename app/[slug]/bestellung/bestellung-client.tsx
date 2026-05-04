@@ -39,10 +39,10 @@ const TIME_SLOTS = [
 
 // ─── Order Type Config ─────────────────────────────────────────────────────────
 
-const ORDER_TYPES: { id: OrderType; emoji: string; label: string; sub: string }[] = [
-  { id: 'pickup',   emoji: '🥡', label: 'Abholen',      sub: 'Ich komme selbst vorbei' },
-  { id: 'dine-in',  emoji: '🪑', label: 'Vor Ort essen', sub: 'Ich bin bereits da / komme gleich' },
-  { id: 'delivery', emoji: '🛵', label: 'Liefern',       sub: 'Bitte an meine Adresse liefern' },
+const ORDER_TYPES: { id: OrderType; mark: string; label: string; sub: string }[] = [
+  { id: 'pickup',   mark: 'AB', label: 'Abholen',      sub: 'Ich komme selbst vorbei' },
+  { id: 'dine-in',  mark: 'TI', label: 'Vor Ort essen', sub: 'Ich bin bereits da / komme gleich' },
+  { id: 'delivery', mark: 'LI', label: 'Liefern',       sub: 'Bitte an meine Adresse liefern' },
 ]
 
 // ─── Confetti ──────────────────────────────────────────────────────────────────
@@ -232,15 +232,14 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
   function buildWaUrl() {
     if (!tenantPhone || !config) return null
     const ph = tenantPhone.replace(/\D/g, '')
-    const typeEmoji = { pickup: '🥡', 'dine-in': '🪑', delivery: '🛵' }[orderType ?? 'pickup']
     const lines = [
-      `🥣 Kustomizer Bowl — ${tenantName}`,
+      `Kustomizer Bowl — ${tenantName}`,
       '',
-      `${typeEmoji} ${orderTypeLabel(orderType)}`,
+      `Bestellart: ${orderTypeLabel(orderType)}`,
       `👤 Name: ${name}`,
       ...(orderType === 'pickup'   ? [`⏰ Abholung: ${selectedTime} Uhr`] : []),
-      ...(orderType === 'dine-in'  ? [tableNumber ? `🪑 Tisch: ${tableNumber}` : '🪑 Vor Ort'] : []),
-      ...(orderType === 'delivery' ? [`📍 Lieferung an: ${address}`, ...(selectedTime ? [`⏰ Wunschzeit: ${selectedTime} Uhr`] : [])] : []),
+      ...(orderType === 'dine-in'  ? [tableNumber ? `Tisch: ${tableNumber}` : 'Vor Ort'] : []),
+      ...(orderType === 'delivery' ? [`Lieferung an: ${address}`, ...(selectedTime ? [`Wunschzeit: ${selectedTime} Uhr`] : [])] : []),
       '',
       `📦 Basis:   ${config.basis}`,
       `🍖 Warmspeise: ${config.protein}`,
@@ -250,7 +249,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
       ...(config.extras.length ? [`➕ Extras:  ${config.extras.join(', ')}`] : []),
       '',
       `💶 Preis: ${config.price.toFixed(2).replace('.', ',')} €`,
-      ...(note ? [`📝 ${note}`] : []),
+      ...(note ? [`Anmerkung: ${note}`] : []),
     ]
     return `https://wa.me/${ph}?text=${encodeURIComponent(lines.join('\n'))}`
   }
@@ -284,10 +283,10 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
         <style>{globalStyles}</style>
         <PageHeader title="Direkt bestellen" slug={slug} dark={dark} toggleDark={toggleDark} />
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '64px 24px', textAlign: 'center' }}>
-          <span style={{ fontSize: 56, display: 'block', marginBottom: 16 }}>🥣</span>
+          <span className="flow-card-mark" aria-hidden>BOWL</span>
           <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 20, fontWeight: 800, color: text, marginBottom: 10 }}>Keine Bestellung gefunden</h3>
           <p style={{ fontSize: 14, color: text3, lineHeight: 1.6, marginBottom: 24 }}>Konfiguriere zuerst deine Bowl im Kustomizer.</p>
-          <Link href={`/${slug}/kustomizer`} style={btnPrimary}>Bowl konfigurieren →</Link>
+          <Link href={`/${slug}/kustomizer`} style={btnPrimary}>Bowl konfigurieren</Link>
         </div>
       </div>
     )
@@ -300,10 +299,10 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
       <div className="odis-flow-shell" style={{ background: bg, minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', paddingBottom: 48 }}>
         <style>{globalStyles}</style>
         <header className="odis-flow-header" style={{ background: surface, padding: '14px 20px', borderBottom: `1px solid ${border}` }}>
-          <h1 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 17, fontWeight: 800, color: text, margin: 0 }}>Bestellung eingegangen 🎉</h1>
+          <h1 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 17, fontWeight: 800, color: text, margin: 0 }}>Bestellung eingegangen</h1>
         </header>
         <div style={{ maxWidth: 480, margin: '0 auto', padding: '40px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-          <span style={{ fontSize: 64, display: 'block', marginBottom: 20, animation: 'successBounce 0.6s cubic-bezier(0.34,1.56,0.64,1)' }}>🎉</span>
+          <span className="flow-card-mark" aria-hidden>OK</span>
           <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 26, fontWeight: 900, color: text, marginBottom: 10 }}>Bestellung eingegangen!</h2>
           <p style={{ fontSize: 15, color: text3, lineHeight: 1.6, maxWidth: 300, marginBottom: 6 }}>
             {orderType === 'delivery'
@@ -318,7 +317,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
             {[
               ['Name', name],
               ['Bowl', `${config.basis} Bowl`],
-              ['Art', `${ORDER_TYPES.find(o=>o.id===orderType)?.emoji} ${orderTypeLabel(orderType)}`],
+              ['Art', orderTypeLabel(orderType)],
               ...(orderType === 'pickup' && selectedTime ? [['Abholung', `${selectedTime} Uhr`]] : []),
               ...(orderType === 'dine-in' && tableNumber  ? [['Tisch', tableNumber]] : []),
               ...(orderType === 'delivery' ? [['Lieferung', address]] : []),
@@ -335,7 +334,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
           {loyaltyEnabled && (
             <div style={{ background: dark ? 'linear-gradient(135deg,#14532d,#1a3d28)' : 'linear-gradient(135deg,#dcfce7,#bbf7d0)', borderRadius: 16, padding: '14px 16px', maxWidth: 360, width: '100%', marginBottom: 20, animation: 'fadeUp 0.5s ease 0.2s both' }}>
               <p style={{ fontSize: 14, color: dark ? '#86efac' : '#15803d', margin: 0, lineHeight: 1.5 }}>
-                🥣 <strong>+1 Stempel</strong> für deine Treuecard!{stampsLeft !== null ? ` Noch ${stampsLeft} bis zur Gratis-Bowl.` : ' Melde dich im VIP-Bereich an.'}
+                <strong>+1 Stempel</strong> für deine Treuecard!{stampsLeft !== null ? ` Noch ${stampsLeft} bis zur Gratis-Bowl.` : ' Melde dich im VIP-Bereich an.'}
               </p>
             </div>
           )}
@@ -350,7 +349,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
           )}
 
           <Link href={`/${slug}`} style={{ display: 'inline-block', padding: '14px 28px', background: 'transparent', border: `1.5px solid ${border}`, borderRadius: 16, textDecoration: 'none', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 700, color: text2 }}>
-            🏠 Zurück zur Startseite
+            Zurück zur Startseite
           </Link>
         </div>
       </div>
@@ -370,16 +369,16 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
 
           <SLabel text="Schritt 2 — Bestellübersicht" color={text3} />
           <div style={{ background: surface, borderRadius: 20, padding: 20, boxShadow: shadow, border: `1px solid ${border}`, marginBottom: 14 }}>
-            <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 800, color: text, marginBottom: 14 }}>✅ Deine Angaben</h3>
+              <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 800, color: text, marginBottom: 14 }}>Deine Angaben</h3>
             {[
               ['Bowl',      `${config.basis} Bowl`],
               ['Preis',     `${config.price.toFixed(2).replace('.', ',')} €`],
               ['Name',      name],
               ['Nummer',    `+49 ${phone.replace(/^0+/, '')}`],
-              ['Art',       `${ORDER_TYPES.find(o=>o.id===orderType)?.emoji} ${orderTypeLabel(orderType)}`],
+              ['Art',       orderTypeLabel(orderType)],
               ...locationRow(),
               ...(note ? [['Anmerkung', note]] : []),
-              ['Treuecard', loyaltyEnabled ? '✅ Stempel wird vergeben' : '❌ Nicht aktiviert'],
+              ['Treuecard', loyaltyEnabled ? 'Stempel wird vergeben' : 'Nicht aktiviert'],
             ].map(([k, v]) => (
               <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, padding: '7px 0', borderBottom: `1px solid ${border}` }}>
                 <span style={{ color: text3 }}>{k}</span>
@@ -390,11 +389,11 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
 
           <button onClick={submitOrder} disabled={submitting} className="cta"
             style={{ width: '100%', padding: '18px', background: 'linear-gradient(135deg,#22c55e,#16a34a)', border: 'none', borderRadius: 16, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 18, fontWeight: 800, color: '#fff', cursor: submitting ? 'not-allowed' : 'pointer', boxShadow: '0 6px 28px rgba(34,197,94,0.40)', opacity: submitting ? 0.7 : 1, marginBottom: 12, transition: 'all 0.2s' }}>
-            {submitting ? '⏳ Wird übermittelt…' : '🥣 Jetzt verbindlich bestellen'}
+            {submitting ? 'Wird übermittelt…' : 'Jetzt verbindlich bestellen'}
           </button>
           <button onClick={() => setStep('form')}
             style={{ width: '100%', padding: '14px', background: 'transparent', border: `1.5px solid ${border}`, borderRadius: 16, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 15, fontWeight: 700, color: text2, cursor: 'pointer' }}>
-            ← Zurück bearbeiten
+            Zurück bearbeiten
           </button>
         </div>
       </div>
@@ -419,7 +418,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
         {/* Contact */}
         <SLabel className="rev d2" text="Schritt 1 — Deine Daten" color={text3} />
         <div className="rev d3" style={card(surface, shadow, border)}>
-          <h3 style={cardTitle(text)}>📱 Kontakt</h3>
+          <h3 style={cardTitle(text)}>Kontakt</h3>
 
           {/* Name */}
           <div style={{ marginBottom: 12 }}>
@@ -448,7 +447,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
             <p style={{ fontSize: 12, color: '#ef4444', marginBottom: 8 }}>Bitte eine Option wählen</p>
           )}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {ORDER_TYPES.map(({ id, emoji, label, sub }) => {
+            {ORDER_TYPES.map(({ id, mark, label, sub }) => {
               const selected = orderType === id
               return (
                 <button key={id} className="ot-card"
@@ -464,9 +463,8 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
                     boxShadow: selected ? '0 4px 20px rgba(34,197,94,0.22)' : shadow,
                     transition: 'all 0.2s',
                   }}>
-                  {/* Emoji bubble */}
-                  <div style={{ width: 48, height: 48, borderRadius: 14, background: selected ? 'rgba(255,255,255,0.2)' : (dark ? '#1a3d28' : '#f0fdf4'), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>
-                    {emoji}
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: selected ? 'rgba(255,255,255,0.2)' : (dark ? '#1a3d28' : '#f0fdf4'), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, flexShrink: 0, fontWeight: 900, letterSpacing: '0.08em', color: selected ? (dark ? '#bbf7d0' : '#15803d') : text3 }}>
+                    {mark}
                   </div>
                   {/* Text */}
                   <div style={{ flex: 1 }}>
@@ -492,7 +490,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
         {/* PICKUP: time slots */}
         {orderType === 'pickup' && (
           <div className="rev d1" style={{ ...card(surface, shadow, border), marginBottom: 14 }}>
-            <h3 style={cardTitle(text)}>⏰ Abholzeit wählen</h3>
+            <h3 style={cardTitle(text)}>Abholzeit wählen</h3>
             {timeError && <p style={{ fontSize: 12, color: '#ef4444', marginBottom: 8 }}>Bitte eine Zeit wählen</p>}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
               {TIME_SLOTS.map((t) => {
@@ -512,7 +510,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
         {/* DINE-IN: table number */}
         {orderType === 'dine-in' && (
           <div className="rev d1" style={{ ...card(surface, shadow, border), marginBottom: 14 }}>
-            <h3 style={cardTitle(text)}>🪑 Tischnummer (optional)</h3>
+            <h3 style={cardTitle(text)}>Tischnummer (optional)</h3>
             <p style={{ fontSize: 13, color: text3, marginBottom: 12, lineHeight: 1.5 }}>Du kannst auch direkt bestellen ohne Tischnummer — wir finden dich.</p>
             <input type="text" value={tableNumber} onChange={e => setTableNumber(e.target.value)}
               placeholder="z.B. Tisch 4 oder Ecktisch links"
@@ -520,7 +518,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
 
             {/* Sofort-Info */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, padding: '10px 14px', background: dark ? '#1a3d28' : '#f0fdf4', borderRadius: 10, border: `1px solid ${border}` }}>
-              <span style={{ fontSize: 18 }}>⚡</span>
+              <span aria-hidden style={{ fontSize: 12, fontWeight: 900 }}>15</span>
               <p style={{ fontSize: 12, color: text3, margin: 0 }}>Deine Bowl wird sofort nach Eingang zubereitet.</p>
             </div>
           </div>
@@ -529,7 +527,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
         {/* DELIVERY: address + optional time */}
         {orderType === 'delivery' && (
           <div className="rev d1" style={{ ...card(surface, shadow, border), marginBottom: 14 }}>
-            <h3 style={cardTitle(text)}>📍 Lieferadresse</h3>
+            <h3 style={cardTitle(text)}>Lieferadresse</h3>
             <div style={{ marginBottom: 16 }}>
               <label style={inputLabel(text3)}>Straße, Hausnummer, Ort</label>
               <input type="text" value={address} onChange={e=>{setAddress(e.target.value);setAddressError(false)}}
@@ -562,7 +560,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
               {loyaltyEnabled ? '✓' : ''}
             </div>
             <div>
-              <h4 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 14, fontWeight: 800, color: dark ? '#22c55e' : '#15803d', marginBottom: 3 }}>🥣 Stempel sammeln aktivieren</h4>
+              <h4 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 14, fontWeight: 800, color: dark ? '#22c55e' : '#15803d', marginBottom: 3 }}>Stempel sammeln aktivieren</h4>
               <p style={{ fontSize: 12, color: dark ? '#a7f3d0' : '#15803d', lineHeight: 1.4 }}>Deine Nummer wird gespeichert — nach 8 Bestellungen eine Gratis-Bowl.</p>
             </div>
           </div>
@@ -570,7 +568,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
 
         {/* Notes */}
         <div className="rev d5" style={{ ...card(surface, shadow, border), marginBottom: 14 }}>
-          <h3 style={cardTitle(text)}>📝 Anmerkungen (optional)</h3>
+          <h3 style={cardTitle(text)}>Anmerkungen (optional)</h3>
           <textarea value={note} onChange={e => setNote(e.target.value)}
             placeholder="z.B. kein Koriander, extra scharf, bitte Gabel einpacken …"
             style={{ width: '100%', height: 80, padding: 14, background: surface2, border: `1.5px solid ${border}`, borderRadius: 10, fontFamily: 'Inter, sans-serif', fontSize: 15, color: text, resize: 'none', lineHeight: 1.5, boxSizing: 'border-box' }} />
@@ -579,7 +577,7 @@ export function BestellungClient({ slug, tenantName, tenantPhone, tenantAddress,
         {/* CTA */}
         <button onClick={goConfirm} className="cta rev d6"
           style={{ width: '100%', padding: '18px', background: 'linear-gradient(135deg,#22c55e,#16a34a)', border: 'none', borderRadius: 16, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 18, fontWeight: 800, color: '#fff', cursor: 'pointer', boxShadow: '0 6px 28px rgba(34,197,94,0.40)', transition: 'all 0.2s' }}>
-          Weiter zur Bestätigung →
+          Weiter zur Bestätigung
         </button>
 
       </div>
@@ -608,7 +606,7 @@ function SummaryCard({ config, tags, descParts }: { config: KustomizerConfig; ta
   return (
     <div style={{ background: 'linear-gradient(135deg,#14532d,#166534)', borderRadius: 24, padding: 20, marginBottom: 20, position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle,rgba(34,197,94,0.2),transparent 70%)', pointerEvents: 'none' }} />
-      <span style={{ fontSize: 32, display: 'block', marginBottom: 10 }}>🥣</span>
+      <span className="flow-card-mark" aria-hidden>BOWL</span>
       <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 4 }}>{config.basis} Bowl</h2>
       <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.70)', lineHeight: 1.5, marginBottom: 12 }}>{descParts.join(' · ') || 'Individuelle Bowl'}</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>

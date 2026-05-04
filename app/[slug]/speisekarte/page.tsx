@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { getTenant } from '@/lib/tenant'
 import { getMenuByRestaurant } from '@/lib/menu'
@@ -21,6 +20,19 @@ const BOWL_PHOTOS = [
   '/products/IMG_4088.JPG',
 ]
 
+function hashString(s: string): number {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+function fallbackPhotoFor(id: string) {
+  return BOWL_PHOTOS[hashString(id) % BOWL_PHOTOS.length]
+}
+
 function formatPrice(n: number) {
   return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n)
 }
@@ -33,9 +45,9 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
   const categories = await getMenuByRestaurant(tenant.id)
   const orderHref = `/${slug}/order`
   const kustomizerHref = `/${slug}/kustomizer`
-
-  // Globaler Foto-Index — ein Foto pro Item, übergreifend
-  let photoIndex = 0
+  const displayAddress = slug === 'odis-bowl'
+    ? 'Borneplatz 2, 48431 Rheine'
+    : tenant.address
 
   return (
     <CustomerPageShell slug={slug} restaurantName={tenant.name}>
@@ -48,14 +60,14 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
             Frisch zubereitet — täglich für dich. Direkt bei {tenant.name} bestellen, keine Drittgebühren.
           </p>
           <Link href={kustomizerHref} className="speise-btn-cta">
-            🥣 Eigene Bowl konfigurieren
+            Eigene Bowl konfigurieren
           </Link>
         </section>
 
         {/* Kategorien */}
         {categories.length === 0 ? (
           <section className="speise-section speise-fallback">
-            <p className="speise-fallback-icon">🥣</p>
+            <p className="speise-fallback-icon">BOWL</p>
             <h2>Menü wird geladen…</h2>
             <p>Schau später nochmal vorbei oder bestelle direkt im Konfigurator.</p>
             <Link href={kustomizerHref} className="speise-btn-cta">
@@ -68,8 +80,7 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
               <h2 id={`cat-${category.id}`} className="speise-section-title">{category.name}</h2>
               <div className="speise-grid">
                 {category.items.map((item) => {
-                  const photo = BOWL_PHOTOS[photoIndex % BOWL_PHOTOS.length]
-                  photoIndex += 1
+                  const photo = item.image_url?.trim() || fallbackPhotoFor(item.id)
                   return (
                     <Link
                       key={item.id}
@@ -77,12 +88,12 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
                       className="speise-card"
                     >
                       <div className="speise-card-img-wrap">
-                        <Image
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                           src={photo}
                           alt={item.name}
-                          fill
-                          sizes="(max-width: 640px) 100vw, 380px"
-                          style={{ objectFit: 'cover', objectPosition: 'center' }}
+                          loading="lazy"
+                          decoding="async"
                           className="speise-card-img"
                         />
                         <div className="speise-card-scrim" />
@@ -93,7 +104,7 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
                         {item.description && <p className="speise-card-desc">{item.description}</p>}
                         <div className="speise-card-footer">
                           <span className="speise-card-price">{formatPrice(Number(item.price))}</span>
-                          <span className="speise-card-btn">Bestellen →</span>
+                          <span className="speise-card-btn">Direkt bestellen</span>
                         </div>
                       </div>
                     </Link>
@@ -106,11 +117,11 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
 
         {/* Trust Bar */}
         <section className="speise-trust">
-          <div className="speise-trust-item"><span aria-hidden>✅</span> Keine Drittgebühren</div>
-          <div className="speise-trust-item"><span aria-hidden>⚡</span> Fertig in ~15 Min</div>
-          <div className="speise-trust-item"><span aria-hidden>🌱</span> Täglich frisch</div>
-          {tenant.address && (
-            <div className="speise-trust-item"><span aria-hidden>📍</span> {tenant.address}</div>
+          <div className="speise-trust-item"><span aria-hidden>✓</span> Keine Drittgebühren</div>
+          <div className="speise-trust-item"><span aria-hidden>15</span> Fertig in ~15 Min</div>
+          <div className="speise-trust-item"><span aria-hidden>+</span> Täglich frisch</div>
+          {displayAddress && (
+            <div className="speise-trust-item"><span aria-hidden>⌖</span> {displayAddress}</div>
           )}
         </section>
 
@@ -190,7 +201,14 @@ export default async function SpeisekartePage({ params }: { params: Promise<{ sl
               0 18px 44px rgba(0,0,0,0.40);
           }
           .speise-card-img-wrap { position: relative; aspect-ratio: 4/3; overflow: hidden; }
-          .speise-card-img { transition: transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+          .speise-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+          }
           .speise-card:hover .speise-card-img { transform: scale(1.06); }
           .speise-card-scrim {
             position: absolute; inset: 0;

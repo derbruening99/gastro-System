@@ -9,7 +9,7 @@ const HERO_IMAGES = [
   '/Titelbild03.JPG',
 ] as const
 
-const ROTATION_MS = 7800
+const ROTATION_MS = 12000
 
 export function HeroBackdrop() {
   const [active, setActive] = useState(0)

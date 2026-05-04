@@ -161,7 +161,7 @@ function buildWaText(sel: Selection, slug: string, restaurantPhone: string | nul
   const price = calcPrice(sel)
 
   const lines = [
-    '🥣 Kustomizer Bowl — Odi\'s Bowl:',
+    'Kustomizer Bowl — Odi\'s Bowl:',
     '',
     `📦 Basis:    ${basisLabel}`,
     `🍖 Warmspeise:  ${proteinLabel}`,
@@ -205,6 +205,8 @@ function OptionChip({
   selected: boolean
   onClick: () => void
 }) {
+  const marker = option.tag ? option.tag.slice(0, 2).toUpperCase() : option.label.slice(0, 2).toUpperCase()
+
   return (
     <button
       onClick={onClick}
@@ -219,9 +221,7 @@ function OptionChip({
         cursor: 'pointer',
       }}
     >
-      {option.emoji && (
-        <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{option.emoji}</span>
-      )}
+      <span className="flow-option-mark" aria-hidden>{marker}</span>
       <div className="flex-1 min-w-0">
         <div className="font-bold text-sm" style={{ color: '#0f1a12' }}>
           {option.label}
@@ -256,7 +256,7 @@ function LivePrice({ price }: { price: number }) {
       style={{ background: 'linear-gradient(135deg, #14532d, #166534)' }}
     >
       <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>
-        🥣 Aktueller Preis
+        Aktueller Preis
       </span>
       <span className="font-black text-white" style={{ fontSize: 22 }}>
         {price.toFixed(2).replace('.', ',')} €
@@ -284,15 +284,15 @@ function SummaryStep({
   const waUrl = buildWaText(sel, tenant.slug, tenant.phone ?? null)
 
   const rows = [
-    { label: 'Basis',     step: 0, value: STEPS[0].options.find((o) => o.id === sel.basis)?.label ?? '–', emoji: '🍚' },
-    { label: 'Warmspeise', step: 1, value: STEPS[1].options.find((o) => o.id === sel.protein)?.label ?? '–', emoji: '🍖' },
-    { label: 'Zutaten',   step: 2, value: sel.zutaten.map((id) => STEPS[2].options.find((o) => o.id === id)?.label ?? id).join(', ') || '–', emoji: '🥦' },
-    { label: 'Sauce',     step: 3, value: STEPS[3].options.find((o) => o.id === sel.sauce)?.label ?? '–', emoji: '🫙' },
-    { label: 'Crunch',    step: 4, value: sel.crunch.map((id) => STEPS[4].options.find((o) => o.id === id)?.label ?? id).join(', ') || '–', emoji: '✨' },
+    { label: 'Basis',     step: 0, value: STEPS[0].options.find((o) => o.id === sel.basis)?.label ?? '–', mark: '01' },
+    { label: 'Warmspeise', step: 1, value: STEPS[1].options.find((o) => o.id === sel.protein)?.label ?? '–', mark: '02' },
+    { label: 'Zutaten',   step: 2, value: sel.zutaten.map((id) => STEPS[2].options.find((o) => o.id === id)?.label ?? id).join(', ') || '–', mark: '03' },
+    { label: 'Sauce',     step: 3, value: STEPS[3].options.find((o) => o.id === sel.sauce)?.label ?? '–', mark: '04' },
+    { label: 'Crunch',    step: 4, value: sel.crunch.map((id) => STEPS[4].options.find((o) => o.id === id)?.label ?? id).join(', ') || '–', mark: '05' },
     ...(sel.extras.length ? [{
       label: 'Extras', step: -1,
       value: sel.extras.map((id) => UPSELL_OPTIONS.find((o) => o.id === id)?.label ?? id).join(', '),
-      emoji: '➕',
+      mark: '+',
     }] : []),
   ]
 
@@ -307,7 +307,7 @@ function SummaryStep({
           className="absolute pointer-events-none"
           style={{ top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,197,94,0.22), transparent 70%)' }}
         />
-        <span style={{ fontSize: 32, display: 'block', marginBottom: 8 }}>🥣</span>
+        <span className="flow-card-mark" aria-hidden>BOWL</span>
         <h2 className="font-black text-white mb-1" style={{ fontSize: 20 }}>Deine Kustomizer Bowl</h2>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginBottom: 12 }}>
           Persönlich konfiguriert · Frisch für dich
@@ -330,7 +330,7 @@ function SummaryStep({
       >
         {rows.map((r) => (
           <div key={r.label} className="flex items-start gap-3">
-            <span style={{ fontSize: 18, lineHeight: 1.4, flexShrink: 0 }}>{r.emoji}</span>
+            <span className="flow-row-mark" aria-hidden>{r.mark}</span>
             <div className="flex-1 min-w-0">
               <div className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: '#6b7c72' }}>
                 {r.label}
@@ -383,7 +383,7 @@ function SummaryStep({
           marginBottom: 12,
         }}
       >
-        🥣 Direkt bestellen
+        Direkt bestellen
       </button>
 
       <a
@@ -394,7 +394,7 @@ function SummaryStep({
           color: '#3d5c47', background: 'transparent', textDecoration: 'none', display: 'flex',
         }}
       >
-        Lieber aus der Speisekarte wählen →
+        Lieber aus der Speisekarte wählen
       </a>
     </div>
   )
@@ -617,8 +617,8 @@ export default function KustomizerClient({ tenant }: { tenant: Restaurant }) {
           {/* Step Header */}
           {!showSummary && (
             <div className="odis-flow-step-head mb-5">
-              <div style={{ fontSize: 36, marginBottom: 6 }}>
-                {showExtras ? '➕' : step.emoji}
+              <div className="flow-step-kicker">
+                {showExtras ? 'EX' : `0${currentStep + 1}`}
               </div>
               <h2 className="font-black mb-1" style={{ fontSize: 20, color: '#0f1a12' }}>
                 {showExtras ? 'Extras dazu?' : step.title}
@@ -695,7 +695,7 @@ export default function KustomizerClient({ tenant }: { tenant: Restaurant }) {
                   boxShadow: '0 6px 28px rgba(34,197,94,0.40)',
                 }}
               >
-                Zur Zusammenfassung →
+                Zur Zusammenfassung
               </button>
             ) : (
               <button
@@ -715,8 +715,8 @@ export default function KustomizerClient({ tenant }: { tenant: Restaurant }) {
                 {step.multi && !canProceed()
                   ? `Bitte mind. eine ${step.title.split(' ')[1] ?? 'Option'} wählen`
                   : currentStep < TOTAL_STEPS - 1
-                  ? 'Weiter →'
-                  : 'Fast fertig →'}
+                  ? 'Weiter'
+                  : 'Fast fertig'}
               </button>
             )}
 
